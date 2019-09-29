@@ -29,6 +29,13 @@ type Login struct {
 }
 
 /**
+* use this struct when reset email
+ */
+type Reset struct {
+	Email    string `json:"email"`
+}
+
+/**
 * event when user register
 * create token
 * hash password

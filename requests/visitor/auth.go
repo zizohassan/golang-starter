@@ -46,3 +46,22 @@ func Register(r *http.Request , user *models.User) *govalidator.Validator {
 	}
 	return govalidator.New(opts)
 }
+
+/**
+* validate Reset request
+ */
+func Reset(r *http.Request , user *models.Reset) *govalidator.Validator {
+	/**
+	*  Validation rules
+	 */
+	rules := govalidator.MapData{
+		"email":    []string{"required", "min:6", "max:50", "email"},
+	}
+	opts := govalidator.Options{
+		Request: r,     // request object
+		Rules:   rules, // rules map
+		Data:    user,
+		RequiredDefault: true, // all the field to be pass the rules
+	}
+	return govalidator.New(opts)
+}

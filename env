@@ -3,6 +3,10 @@ APP_ENV=local
 APP_PORT_LOCAL=9090
 APP_PORT_PRODUCTION=80
 
+# urls
+FRONT_END_URL=http://www.website.com/
+RESET_PASSWORD_URL=http://www.website.com/forget
+
 #database config
 DATABASE_USERNAME=root
 DATABASE_PASSWORD=
@@ -22,3 +26,9 @@ VISTORS_SLUG=/
 #path for test and production
 PRODUCTION_MODEL_PATH=models
 TEST_MODEL_PATH=../models
+
+#stmp email
+EMAIL_ADDRESS=
+EMAIL_PASSWORD=
+EMAIL_HOST=
+EMAIL_PORT=

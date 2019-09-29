@@ -66,7 +66,7 @@ func TestRegisterWithMoreThan50Email(t *testing.T)  {
 func TestRegisterWithMoreThan50Name(t *testing.T)  {
 	data := models.User{
 		Name:randomString(70),
-		Email:"zizo19999@gmail.com",
+		Email:"zizo199988@gmail.com",
 		Password:"123457",
 	}
 	w := post(data , "register" , true)
@@ -85,7 +85,7 @@ func TestRegisterWithLessThan7Email(t *testing.T)  {
 func TestRegisterWithMoreThan20Password(t *testing.T)  {
 	data := models.User{
 		Name:"Abdel Aziz hassan",
-		Email:"zizo19999@gmail.com",
+		Email:"zizo199988@gmail.com",
 		Password:randomString(30),
 	}
 	w := post(data , "register" , true)
@@ -95,7 +95,7 @@ func TestRegisterWithMoreThan20Password(t *testing.T)  {
 func TestRegisterWithLessThan4Password(t *testing.T)  {
 	data := models.User{
 		Name:"Abdel Aziz hassan",
-		Email:"zizo19999@gmail.com",
+		Email:"zizo199988@gmail.com",
 		Password:randomString(2),
 	}
 	w := post(data , "register" , true)

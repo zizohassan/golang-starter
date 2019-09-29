@@ -14,7 +14,7 @@ import (
 */
 func TestLoginWithValidData(t *testing.T)  {
 	data := models.User{
-		Email:"zizo19999@gmail.com",
+		Email:"zizo199988@gmail.com",
 		Password:"123457",
 		Name:"Abdel Aziz Hassan",
 	}
@@ -30,7 +30,7 @@ func TestLoginWithValidData(t *testing.T)  {
 */
 func TestLoginWithNotValidEmail(t *testing.T)  {
 	data := models.User{
-		Email:"zizo19999@gmail.com",
+		Email:"zizo199988@gmail.com",
 		Password:"123457",
 		Name:"Abdel Aziz Hassan",
 	}
@@ -51,14 +51,14 @@ func TestLoginWithNotValidEmail(t *testing.T)  {
  */
 func TestLoginWithNotValidPassword(t *testing.T)  {
 	data := models.User{
-		Email:"zizo19999@gmail.com",
+		Email:"zizo199988@gmail.com",
 		Password:"123457",
 		Name:"Abdel Aziz Hassan",
 	}
 	w := post(data , "register" , true)
 	assert.Equal(t, 200, w.Code)
 	loginData := models.User{
-		Email:"zizo19999@gmail.com",
+		Email:"zizo199988@gmail.com",
 		Password:"12345745",
 	}
 	l := post(loginData , "login" , false)
@@ -72,7 +72,7 @@ func TestLoginWithNotValidPassword(t *testing.T)  {
  */
 func TestLoginWithBlockUser(t *testing.T)  {
 	data := models.User{
-		Email:"zizo19999@gmail.com",
+		Email:"zizo199988@gmail.com",
 		Password:"123457",
 		Name:"Abdel Aziz Hassan",
 	}
@@ -80,7 +80,7 @@ func TestLoginWithBlockUser(t *testing.T)  {
 	assert.Equal(t, 200, w.Code)
 	config.DB.Model(&models.User{}).Where("email = ? " , data.Email).Update("block" , 1)
 	loginData := models.User{
-		Email:"zizo19999@gmail.com",
+		Email:"zizo199988@gmail.com",
 		Password:"123457",
 	}
 	l := post(loginData , "login" , false)
@@ -112,7 +112,7 @@ func TestLoginWithLessThan7Email(t *testing.T)  {
 func TestLoginWithMoreThan20Password(t *testing.T)  {
 	data := models.User{
 		Name:"Abdel Aziz hassan",
-		Email:"zizo19999@gmail.com",
+		Email:"zizo199988@gmail.com",
 		Password:randomString(30),
 	}
 	w := post(data , "login" , true)
@@ -122,7 +122,7 @@ func TestLoginWithMoreThan20Password(t *testing.T)  {
 func TestLoginWithLessThan4Password(t *testing.T)  {
 	data := models.User{
 		Name:"Abdel Aziz hassan",
-		Email:"zizo19999@gmail.com",
+		Email:"zizo199988@gmail.com",
 		Password:randomString(2),
 	}
 	w := post(data , "login" , true)

@@ -1,3 +1,4 @@
 golang-starter
 .env
 .idea
+test/.env

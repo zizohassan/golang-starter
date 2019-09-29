@@ -13,6 +13,7 @@ func Visitor(r *gin.RouterGroup) *gin.RouterGroup {
 	/// start auth apis
 	r.POST("login" , visitor.Login)
 	r.POST("register" , visitor.Register)
+	r.POST("reset" , visitor.Reset)
 	/// end auth apis
 
 	return r
