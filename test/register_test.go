@@ -73,6 +73,15 @@ func TestRegisterWithMoreThan50Name(t *testing.T)  {
 	assert.Equal(t, 400, w.Code)
 }
 
+func TestRegisterWithLessThan7Email(t *testing.T)  {
+	data := models.User{
+		Email:"m@m.i",
+		Password:"123457",
+	}
+	w := post(data , "register" , true)
+	assert.Equal(t, 400, w.Code)
+}
+
 func TestRegisterWithMoreThan20Password(t *testing.T)  {
 	data := models.User{
 		Name:"Abdel Aziz hassan",

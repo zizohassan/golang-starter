@@ -38,7 +38,7 @@ func ReturnNotFound(g *gin.Context, msg string) {
 func ReturnForbidden(g *gin.Context, msg string) {
 	var errors map[string]string
 	var data map[string]interface{}
-	response(g , msg , data, errors ,http.StatusForbidden , 304 , false)
+	response(g , msg , data, errors ,http.StatusForbidden , 403 , false)
 	return
 }
 

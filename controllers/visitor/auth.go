@@ -95,9 +95,8 @@ func Register(g *gin.Context)  {
 	* check if this email exists database
 	* if this email found will return
 	 */
-	checkUser := new(models.User)
-	config.DB.Find(&checkUser, "email = ? ", user.Email)
-	if checkUser.ID != 0 {
+	config.DB.Find(&user, "email = ? ", user.Email)
+	if user.ID != 0 {
 		helpers.ReturnFoundRow(g, "We found this email in our system")
 		return
 	}

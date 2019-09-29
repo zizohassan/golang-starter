@@ -14,7 +14,7 @@ func Login(r *http.Request , login *models.Login) *govalidator.Validator {
 	*  Validation rules
 	*/
 	rules := govalidator.MapData{
-		"email":    []string{"required", "min:4", "max:50", "email"},
+		"email":    []string{"required", "min:6", "max:50", "email"},
 		"password": []string{"required", "between:6,20"},
 	}
 	opts := govalidator.Options{
@@ -34,7 +34,7 @@ func Register(r *http.Request , user *models.User) *govalidator.Validator {
 	*  Validation rules
 	 */
 	rules := govalidator.MapData{
-		"email":    []string{"required", "min:4", "max:50", "email"},
+		"email":    []string{"required", "min:6", "max:50", "email"},
 		"name":     []string{"required", "min:4", "max:50"},
 		"password": []string{"required", "between:6,20"},
 	}
