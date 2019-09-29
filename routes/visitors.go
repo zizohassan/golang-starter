@@ -10,7 +10,10 @@ import (
 * anyone will have access this routes
  */
 func Visitor(r *gin.RouterGroup) *gin.RouterGroup {
+	/// start auth apis
 	r.POST("login" , visitor.Login)
+	r.POST("register" , visitor.Register)
+	/// end auth apis
 
 	return r
 }

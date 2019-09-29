@@ -2,6 +2,7 @@ package models
 
 import (
 	"github.com/jinzhu/gorm"
+	"investment-users/helpers"
 	"starter/config"
 )
 
@@ -12,18 +13,36 @@ import (
 type User struct {
 	gorm.Model
 	Name     string `gorm:"type:varchar(50);" json:"name"`
-	Email    string `gorm:"type:varchar(100);unique_index" json:"email"`
-	Role     string `gorm:"size:20" json:"role"`
-	Password string `gorm:"size:255" json:"_"`
+	Email    string `gorm:"type:varchar(50);unique_index" json:"email"`
+	Role     int    `gorm:"_" json:"role"`
+	Password string `gorm:"size:255" json:"password"`
 	Token    string `gorm:"size:255" json:"token"`
+	Block    int   `gorm:"_" json:"block"`
 }
 
 /**
-* use this struct when user login
+* use this struct when visitor login
  */
 type Login struct {
-	Password string `gorm:"size:255" json:"password"`
-	Email    string `gorm:"type:varchar(100);unique_index" json:"email"`
+	Password string `json:"password"`
+	Email    string `json:"email"`
+}
+
+/**
+* event when user register
+* create token
+* hash password
+* set user role
+* set block user to not block (1 is blocked 2 is not blocked)
+*/
+func (user *User) BeforeCreate(scope *gorm.Scope) error {
+	token, _ := helpers.HashPassword(user.Email + user.Password)
+	password, _ := helpers.HashPassword(user.Password)
+	scope.SetColumn("token", token)
+	scope.SetColumn("password", password)
+	scope.SetColumn("role", 1)
+	scope.SetColumn("block", 2)
+	return nil
 }
 
 /**
@@ -51,7 +70,7 @@ func UsersResponse(users []User) map[uint]map[string]interface{} {
 }
 
 /**
-* migration function must be the file name concnate with Migrate
+* migration function must be the file name concat with Migrate
 * key word Example : user will be UserMigrate
  */
 func (s *MigrationTables) UserMigrate() {

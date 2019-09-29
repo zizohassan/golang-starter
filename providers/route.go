@@ -10,7 +10,7 @@ import (
 * sets routing group you can edit any group
 * slugs by edit env file
 */
-func routing(r *gin.Engine) *gin.Engine {
+func Routing(r *gin.Engine) *gin.Engine {
 	admin := r.Group(os.Getenv("ADMIN_SLUG"))
 	{
 		routes.Admin(admin)

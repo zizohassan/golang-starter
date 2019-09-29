@@ -3,7 +3,7 @@ package middleware
 import "github.com/gin-gonic/gin"
 
 /**
-cross
+* cross origin allow any one to access this apis
 */
 func CORSMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {

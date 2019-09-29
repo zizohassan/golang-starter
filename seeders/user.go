@@ -1,6 +1,8 @@
 package seeders
 
-import "fmt"
+import (
+	"fmt"
+)
 
 /***
 *	Seed Function must Have the same file Name then Add Seeder key word

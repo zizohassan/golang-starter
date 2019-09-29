@@ -1,6 +1,7 @@
 package main
 
 import (
+	"os"
 	"starter/config"
 	"starter/models"
 	"starter/providers"
@@ -18,7 +19,7 @@ func main() {
 	* to stop delete tables make DROP_ALL_TABLES false in env file
 	* if you need to stop auto migration just stop this line
 	*/
-	models.MigrateAllTable()
+	models.MigrateAllTable(os.Getenv("PRODUCTION_MODEL_PATH"))
 	/**
 	* this function will open seeders folder look inside all files
 	* search for seeders function and seed execute these function

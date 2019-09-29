@@ -14,7 +14,7 @@ func Run()  {
 	* setup routes with three default groups
 	* admin / auth / visitors
 	*/
-	routing(r)
+	Routing(r)
 	/**
 	* start app on port to change port just edit APP_PORT in
 	* env file like :9090

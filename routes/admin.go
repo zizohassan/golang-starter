@@ -9,7 +9,6 @@ import (
 * admin only  will have access this routes
  */
 func Admin(r *gin.RouterGroup) *gin.RouterGroup {
-
 	return r
 }
 

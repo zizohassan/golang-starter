@@ -18,9 +18,9 @@ type MigrationTables struct{}
 * drop related table if .env have delete attribute
 * Call migration function
  */
-func MigrateAllTable() {
+func MigrateAllTable(path string) {
 	var t MigrationTables
-	migrateFiles := helpers.ReadAllFiles("models")
+	migrateFiles := helpers.ReadAllFiles(path)
 	for _, file := range migrateFiles {
 		filepath := strings.Split(file, ".")
 		fileName := filepath[0]
