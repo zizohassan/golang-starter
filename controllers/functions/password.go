@@ -4,7 +4,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"investment-users/helpers"
 	"math/rand"
-	"starter/models"
+	"golang-starter/models"
 	"time"
 )
 

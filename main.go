@@ -2,10 +2,10 @@ package main
 
 import (
 	"os"
-	"starter/config"
-	"starter/models"
-	"starter/providers"
-	"starter/seeders"
+	"golang-starter/config"
+	"golang-starter/models"
+	"golang-starter/providers"
+	"golang-starter/seeders"
 )
 
 func main() {

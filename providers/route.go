@@ -3,7 +3,7 @@ package providers
 import (
 	"github.com/gin-gonic/gin"
 	"os"
-	"starter/routes"
+	"golang-starter/routes"
 )
 
 /**

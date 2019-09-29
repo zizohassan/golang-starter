@@ -2,7 +2,7 @@ package seeders
 
 import (
 	"reflect"
-	"starter/helpers"
+	"golang-starter/helpers"
 	"strings"
 )
 

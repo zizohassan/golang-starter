@@ -1,9 +1,7 @@
 package test
 
 import (
-	"fmt"
-	"starter/helpers"
-	"starter/models"
+	"golang-starter/models"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -17,7 +15,7 @@ func TestRegisterWithoutEmail(t *testing.T)  {
 		Password:"123457",
 		Name:"Abdel Aziz Hassan",
 	}
-	w := post(data , "register")
+	w := post(data , "register" , true)
 	assert.Equal(t, 400, w.Code)
 }
 
@@ -26,7 +24,7 @@ func TestRegisterWithoutPassword(t *testing.T)  {
 		Email:"zizo1999988@gmail.com",
 		Name:"Abdel Aziz Hassan",
 	}
-	w := post(data , "register")
+	w := post(data , "register" , true)
 	assert.Equal(t, 400, w.Code)
 }
 
@@ -35,7 +33,7 @@ func TestRegisterWithoutName(t *testing.T)  {
 		Email:"zizo1999988@gmail.com",
 		Password:"123457",
 	}
-	w := post(data , "register")
+	w := post(data , "register" , true)
 	assert.Equal(t, 400, w.Code)
 }
 
@@ -48,7 +46,7 @@ func TestRegisterWithWrongEmailContest(t *testing.T)  {
 		Password:"123457",
 		Name:"Abdel Aziz Hassan",
 	}
-	w := post(data , "register")
+	w := post(data , "register" , true)
 	assert.Equal(t, 400, w.Code)
 }
 
@@ -61,7 +59,7 @@ func TestRegisterWithMoreThan50Email(t *testing.T)  {
 		Email:randomString(50)+"@gmail.com",
 		Password:"123457",
 	}
-	w := post(data , "register")
+	w := post(data , "register" , true)
 	assert.Equal(t, 400, w.Code)
 }
 
@@ -71,7 +69,7 @@ func TestRegisterWithMoreThan50Name(t *testing.T)  {
 		Email:"zizo19999@gmail.com",
 		Password:"123457",
 	}
-	w := post(data , "register")
+	w := post(data , "register" , true)
 	assert.Equal(t, 400, w.Code)
 }
 
@@ -81,7 +79,7 @@ func TestRegisterWithMoreThan20Password(t *testing.T)  {
 		Email:"zizo19999@gmail.com",
 		Password:randomString(30),
 	}
-	w := post(data , "register")
+	w := post(data , "register" , true)
 	assert.Equal(t, 400, w.Code)
 }
 
@@ -91,7 +89,7 @@ func TestRegisterWithLessThan4Password(t *testing.T)  {
 		Email:"zizo19999@gmail.com",
 		Password:randomString(2),
 	}
-	w := post(data , "register")
+	w := post(data , "register" , true)
 	assert.Equal(t, 400, w.Code)
 }
 
@@ -100,13 +98,12 @@ func TestRegisterWithLessThan4Password(t *testing.T)  {
  */
 
 func TestRegisterWithValidCase(t *testing.T)  {
-	helpers.DbTruncate("users")
 	data := models.User{
 		Email:"zizo199988@gmail.com",
 		Password:"123457",
 		Name:"Abdel Aziz Hassan",
 	}
-	w := post(data , "register")
+	w := post(data , "register" , true)
 	assert.Equal(t, 200, w.Code)
 }
 
@@ -114,15 +111,13 @@ func TestRegisterWithValidCase(t *testing.T)  {
 * check if user has register with email before
 */
 func TestRegisterWithExistEmail(t *testing.T)  {
-	helpers.DbTruncate("users")
 	data := models.User{
 		Email:"zizo199988@gmail.com",
 		Password:"123457",
 		Name:"Abdel Aziz Hassan",
 	}
-	w := post(data , "register")
-	fmt.Println(w)
-	k := post(data , "register")
-	fmt.Println(k)
+	w := post(data , "register" , true)
+	k := post(data , "register" , false)
+	assert.Equal(t, 200, w.Code)
 	assert.Equal(t, 409, k.Code)
 }

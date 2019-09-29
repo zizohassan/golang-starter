@@ -2,7 +2,7 @@ package providers
 
 import (
 	"github.com/gin-gonic/gin"
-	"starter/middleware"
+	"golang-starter/middleware"
 )
 
 func middlewares(r *gin.Engine) *gin.Engine {

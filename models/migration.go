@@ -4,8 +4,8 @@ import (
 	"github.com/jinzhu/inflection"
 	"os"
 	"reflect"
-	"starter/config"
-	"starter/helpers"
+	"golang-starter/config"
+	"golang-starter/helpers"
 	"strconv"
 	"strings"
 )

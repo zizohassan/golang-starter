@@ -1,6 +1,6 @@
 package helpers
 
-import "starter/config"
+import "golang-starter/config"
 
 /***
 * truncate tables

@@ -2,11 +2,11 @@ package visitor
 
 import (
 	"github.com/gin-gonic/gin"
-	"starter/config"
-	"starter/controllers/functions"
-	"starter/helpers"
-	"starter/models"
-	"starter/requests/visitor"
+	"golang-starter/config"
+	"golang-starter/controllers/functions"
+	"golang-starter/helpers"
+	"golang-starter/models"
+	"golang-starter/requests/visitor"
 )
 
 /**

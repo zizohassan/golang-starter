@@ -3,7 +3,7 @@ package models
 import (
 	"github.com/jinzhu/gorm"
 	"investment-users/helpers"
-	"starter/config"
+	"golang-starter/config"
 )
 
 /***
