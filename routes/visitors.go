@@ -14,6 +14,7 @@ func Visitor(r *gin.RouterGroup) *gin.RouterGroup {
 	r.POST("login" , visitor.Login)
 	r.POST("register" , visitor.Register)
 	r.POST("reset" , visitor.Reset)
+	r.POST("recover" , visitor.Recover)
 	/// end auth apis
 
 	return r

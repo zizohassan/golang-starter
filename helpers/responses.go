@@ -6,13 +6,19 @@ import (
 	"net/http"
 )
 
-func ReturnFoundRow(g *gin.Context , msg string)  {
+/**
+* conflict
+*/
+func ReturnFoundRow(g *gin.Context, msg string) {
 	var errors map[string]string
 	var data map[string]interface{}
-	response(g , msg , data, errors ,http.StatusConflict , 409 , false)
+	response(g, msg, data, errors, http.StatusConflict, 409, false)
 	return
 }
 
+/**
+* NotValidRequest response
+*/
 func ReturnNotValidRequest(error *govalidator.Validator, g *gin.Context) bool {
 	e := error.ValidateJSON()
 	if len(e) > 0 {
@@ -28,33 +34,46 @@ func ReturnNotValidRequest(error *govalidator.Validator, g *gin.Context) bool {
 	return false
 }
 
+/**
+* NotFound response
+*/
 func ReturnNotFound(g *gin.Context, msg string) {
 	var errors map[string]string
 	var data map[string]interface{}
-	response(g , msg , data, errors ,http.StatusNotFound , 404 , false)
+	response(g, msg, data, errors, http.StatusNotFound, 404, false)
 	return
 }
 
+/**
+* Forbidden response
+*/
 func ReturnForbidden(g *gin.Context, msg string) {
 	var errors map[string]string
 	var data map[string]interface{}
-	response(g , msg , data, errors ,http.StatusForbidden , 403 , false)
+	response(g, msg, data, errors, http.StatusForbidden, 403, false)
 	return
 }
 
+/**
+* ok response with data
+*/
 func OkResponse(g *gin.Context, msg string, data map[string]interface{}) {
 	var errors map[string]string
-	response(g , msg , data, errors ,http.StatusOK , 200 , true)
+	response(g, msg, data, errors, http.StatusOK, 200, true)
 	return
 }
 
-func response(g *gin.Context, msg string, data map[string]interface{} , errors map[string]string , httpStatus int, code int , status bool)  {
-	g.JSON( httpStatus , gin.H{
-			"status":  status,
-			"message": msg,
-			"errors":  errors,
-			"code":    code,
-			"data"  :data,
-		})
+/**
+* stander response
+*/
+func response(g *gin.Context, msg string, data map[string]interface{}, errors map[string]string, httpStatus int, code int, status bool) {
+	g.JSON(httpStatus, gin.H{
+		"status":  status,
+		"message": msg,
+		"errors":  errors,
+		"code":    code,
+		"data":    data,
+	})
 	return
 }
+

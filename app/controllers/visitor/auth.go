@@ -35,7 +35,7 @@ func Login(g *gin.Context) {
 	* check if user exists
 	* check if user not blocked
 	 */
-	user, valid := checkUserExistsNotBlocked(g, login.Email)
+	user, valid := checkUserExistsNotBlocked(g, login.Email, "")
 	fmt.Println(user, valid)
 	if !valid {
 		return
@@ -102,6 +102,64 @@ func Register(g *gin.Context) {
 }
 
 /**
+* recover password take request token
+* select user that have this token
+* if user token valid and user not block
+* then user can  recover his password
+ */
+func Recover(g *gin.Context) {
+	/**
+	* init Reset struct to validate request
+	 */
+	recoverPassword := new(models.Recover)
+	/**
+	* get request and parse it to validation
+	* if there any error will return with message
+	 */
+	err := visitor.Recover(g.Request, recoverPassword)
+	/***
+	* return response if there an error if true you
+	* this mean you have errors so we will return and bind data
+	 */
+	if helpers.ReturnNotValidRequest(err, g) {
+		return
+	}
+	/**
+	* check if user exists
+	* check if user not blocked
+	 */
+	user, valid := checkUserExistsNotBlocked(g, "", recoverPassword.Token)
+	if !valid {
+		return
+	}
+	/**
+	* now update token and update password
+	* we update token to make it the old link not valid
+	*/
+	encPassword, _ := helpers.HashPassword(recoverPassword.Password)
+	token, _ := helpers.GenerateToken(user.Password + user.Email)
+	config.DB.Model(&user).Updates(map[string]interface{}{"password": encPassword, "token": token}).First(&user)
+	/**
+	* notice user that his password has been changes
+	 */
+	sendRecoverPasswordEmail(user)
+	/**
+	* return ok response
+	 */
+	helpers.OkResponse(g, "We send your reset password link on your email", transformers.UserResponse(user))
+}
+
+/***
+* notice user that his password has been updated
+ */
+func sendRecoverPasswordEmail(user models.User) {
+	msg := "Your Password has been updated to (" + user.Password + ")" + "\n"
+	msg += "Do not worry your password is encrypted , this just note for your activity" + "\n"
+	msg += os.Getenv("RESET_PASSWORD_URL") + user.Token
+	helpers.SendMail(user.Email, "Your password has been updated", msg)
+}
+
+/**
 * reset password
 * with email you can send reset link
 * to user email
@@ -127,16 +185,11 @@ func Reset(g *gin.Context) {
 	* check if user exists
 	* check if user not blocked
 	 */
-	user, valid := checkUserExistsNotBlocked(g, reset.Email)
+	user, valid := checkUserExistsNotBlocked(g, reset.Email, "")
 	if !valid {
 		return
 	}
-	/**
-	* create reset password link
-	 */
-	msg := "Your Request To reset your password if you take this action click on this link to reset your password " + "\n"
-	msg += os.Getenv("RESET_PASSWORD_URL") + user.Token
-	helpers.SendMail(user.Email, "Reset Password Request", msg)
+	sendRestLink(user)
 	/**
 	* return ok response
 	 */
@@ -145,10 +198,19 @@ func Reset(g *gin.Context) {
 }
 
 /**
+* create reset password link
+* send it to user email
+*/
+func sendRestLink(user models.User)  {
+	msg := "Your Request To reset your password if you take this action click on this link to reset your password " + "\n"
+	msg += os.Getenv("RESET_PASSWORD_URL") + user.Token
+	helpers.SendMail(user.Email, "Reset Password Request", msg)
+}
+/**
 * check if user exists
 * check if user not blocked
  */
-func checkUserExistsNotBlocked(g *gin.Context, email string) (models.User, bool) {
+func checkUserExistsNotBlocked(g *gin.Context, email string, token string) (models.User, bool) {
 	/**
 	* init user struct binding data for user
 	 */
@@ -157,8 +219,14 @@ func checkUserExistsNotBlocked(g *gin.Context, email string) (models.User, bool)
 	* check if this email exists database
 	* if this email will not found will return not found
 	* will return 404 code
+	* will select by email if token is empty
+	* if token not empty select by token
 	 */
-	config.DB.Find(&user, "email = ? ", email)
+	if token != "" {
+		config.DB.Find(&user, "token = ? ", token)
+	} else {
+		config.DB.Find(&user, "email = ? ", email)
+	}
 	if user.ID == 0 {
 		helpers.ReturnNotFound(g, "We not found this user on system")
 		return user, false

@@ -2,6 +2,7 @@ package test
 
 import (
 	"golang-starter/app/models"
+	"net/http/httptest"
 	"testing"
 	"golang-starter/helpers"
 
@@ -108,12 +109,7 @@ func TestRegisterWithLessThan4Password(t *testing.T)  {
  */
 
 func TestRegisterWithValidCase(t *testing.T)  {
-	data := models.User{
-		Email:"zizo199988@gmail.com",
-		Password:"123457",
-		Name:"Abdel Aziz Hassan",
-	}
-	w := post(data , "register" , true)
+	w , _ := registerNewUser()
 	assert.Equal(t, 200, w.Code)
 }
 
@@ -121,13 +117,19 @@ func TestRegisterWithValidCase(t *testing.T)  {
 * check if user has register with email before
 */
 func TestRegisterWithExistEmail(t *testing.T)  {
-	data := models.User{
-		Email:"zizo199988@gmail.com",
-		Password:"123457",
-		Name:"Abdel Aziz Hassan",
-	}
-	w := post(data , "register" , true)
-	k := post(data , "register" , false)
+	w , data := registerNewUser()
 	assert.Equal(t, 200, w.Code)
+	k := post(data , "register" , false)
 	assert.Equal(t, 409, k.Code)
+}
+
+
+func registerNewUser() (*httptest.ResponseRecorder, models.User) {
+	data := models.User{
+		Email:    "zizo199988@gmail.com",
+		Password: "123457",
+		Name:     "Abdel Aziz Hassan",
+	}
+	w := post(data, "register", true)
+	return w, data
 }

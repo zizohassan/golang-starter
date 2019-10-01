@@ -2,8 +2,8 @@ package models
 
 import (
 	"github.com/jinzhu/gorm"
-	"golang-starter/helpers"
 	"golang-starter/config"
+	"golang-starter/helpers"
 )
 
 /***
@@ -17,7 +17,7 @@ type User struct {
 	Role     int    `gorm:"_" json:"role"`
 	Password string `gorm:"size:255" json:"password"`
 	Token    string `gorm:"size:255" json:"token"`
-	Block    int   `gorm:"_" json:"block"`
+	Block    int    `gorm:"_" json:"block"`
 }
 
 /**
@@ -32,7 +32,15 @@ type Login struct {
 * use this struct when reset email
  */
 type Reset struct {
-	Email    string `json:"email"`
+	Email string `json:"email"`
+}
+
+/**
+* use this struct when reset email
+ */
+type Recover struct {
+	Token    string `json:"token"`
+	Password string `json:"password"`
 }
 
 /**
@@ -41,7 +49,7 @@ type Reset struct {
 * hash password
 * set user role
 * set block user to not block (1 is blocked 2 is not blocked)
-*/
+ */
 func (user *User) BeforeCreate(scope *gorm.Scope) error {
 	token, _ := helpers.HashPassword(user.Email + user.Password)
 	password, _ := helpers.HashPassword(user.Password)
