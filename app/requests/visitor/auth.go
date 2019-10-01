@@ -2,8 +2,8 @@ package visitor
 
 import (
 	"github.com/thedevsaddam/govalidator"
+	"golang-starter/app/models"
 	"net/http"
-	"golang-starter/models"
 )
 
 /**

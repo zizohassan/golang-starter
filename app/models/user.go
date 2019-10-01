@@ -2,7 +2,7 @@ package models
 
 import (
 	"github.com/jinzhu/gorm"
-	"investment-users/helpers"
+	"golang-starter/helpers"
 	"golang-starter/config"
 )
 
@@ -50,30 +50,6 @@ func (user *User) BeforeCreate(scope *gorm.Scope) error {
 	scope.SetColumn("role", 1)
 	scope.SetColumn("block", 2)
 	return nil
-}
-
-/**
-* stander the single user response
- */
-func UserResponse(user User) map[string]interface{} {
-	var u = make(map[string]interface{})
-	u["name"] = user.Name
-	u["email"] = user.Email
-	u["role"] = user.Role
-	u["token"] = user.Token
-
-	return u
-}
-
-/**
-* stander the Multi users response
- */
-func UsersResponse(users []User) map[uint]map[string]interface{} {
-	var u = make(map[uint]map[string]interface{})
-	for _, user := range users {
-		u[user.ID] = UserResponse(user)
-	}
-	return u
 }
 
 /**

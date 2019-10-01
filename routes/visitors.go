@@ -2,7 +2,7 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
-	"golang-starter/controllers/visitor"
+	"golang-starter/app/controllers/visitor"
 )
 
 /***

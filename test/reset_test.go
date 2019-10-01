@@ -2,7 +2,7 @@ package test
 
 import (
 	"github.com/stretchr/testify/assert"
-	"golang-starter/models"
+	"golang-starter/app/models"
 	"testing"
 	"time"
 )

@@ -1,8 +1,9 @@
 package test
 
 import (
-	"golang-starter/models"
+	"golang-starter/app/models"
 	"testing"
+	"golang-starter/helpers"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -56,7 +57,7 @@ func TestRegisterWithWrongEmailContest(t *testing.T)  {
 func TestRegisterWithMoreThan50Email(t *testing.T)  {
 	data := models.User{
 		Name:"Abdel Aziz Hassan",
-		Email:randomString(50)+"@gmail.com",
+		Email:helpers.RandomString(50)+"@gmail.com",
 		Password:"123457",
 	}
 	w := post(data , "register" , true)
@@ -65,7 +66,7 @@ func TestRegisterWithMoreThan50Email(t *testing.T)  {
 
 func TestRegisterWithMoreThan50Name(t *testing.T)  {
 	data := models.User{
-		Name:randomString(70),
+		Name:helpers.RandomString(70),
 		Email:"zizo199988@gmail.com",
 		Password:"123457",
 	}
@@ -86,7 +87,7 @@ func TestRegisterWithMoreThan20Password(t *testing.T)  {
 	data := models.User{
 		Name:"Abdel Aziz hassan",
 		Email:"zizo199988@gmail.com",
-		Password:randomString(30),
+		Password:helpers.RandomString(30),
 	}
 	w := post(data , "register" , true)
 	assert.Equal(t, 400, w.Code)
@@ -96,7 +97,7 @@ func TestRegisterWithLessThan4Password(t *testing.T)  {
 	data := models.User{
 		Name:"Abdel Aziz hassan",
 		Email:"zizo199988@gmail.com",
-		Password:randomString(2),
+		Password:helpers.RandomString(2),
 	}
 	w := post(data , "register" , true)
 	assert.Equal(t, 400, w.Code)

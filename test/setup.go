@@ -4,10 +4,9 @@ import (
 	"bytes"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
+	"golang-starter/app/models"
 	"golang-starter/config"
-	"golang-starter/models"
 	"golang-starter/providers"
-	"math/rand"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -45,17 +44,4 @@ func post(data interface{}, url string, migrate bool) *httptest.ResponseRecorder
 	req, _ := http.NewRequest("POST", url, bytes.NewReader(sendData))
 	router.ServeHTTP(w, req)
 	return w
-}
-
-/**
-* generate random string
- */
-func randomString(n int) string {
-	var letter = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
-
-	b := make([]rune, n)
-	for i := range b {
-		b[i] = letter[rand.Intn(len(letter))]
-	}
-	return string(b)
 }

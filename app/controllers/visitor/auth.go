@@ -3,11 +3,11 @@ package visitor
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"golang-starter/app/models"
+	"golang-starter/app/requests/visitor"
+	"golang-starter/app/transformers"
 	"golang-starter/config"
-	"golang-starter/controllers/functions"
 	"golang-starter/helpers"
-	"golang-starter/models"
-	"golang-starter/requests/visitor"
 	"os"
 )
 
@@ -45,7 +45,7 @@ func Login(g *gin.Context) {
 	* if user password is not valid we will return invalid email
 	* or password
 	 */
-	check := functions.CheckPasswordHash(login.Password, user.Password)
+	check := helpers.CheckPasswordHash(login.Password, user.Password)
 	if !check {
 		helpers.ReturnNotFound(g, "your email or your password are not valid")
 		return
@@ -53,12 +53,12 @@ func Login(g *gin.Context) {
 	/**
 	* update token then return with the new data
 	 */
-	token, _ := functions.GenerateToken(user)
+	token, _ := helpers.GenerateToken(user.Password + user.Email)
 	config.DB.Model(&user).Update("token", token).First(&user)
 	/**
 	* now user is login we can return his info
 	 */
-	helpers.OkResponse(g, "you are login now", models.UserResponse(user))
+	helpers.OkResponse(g, "you are login now", transformers.UserResponse(user))
 }
 
 /**
@@ -98,7 +98,7 @@ func Register(g *gin.Context) {
 	/**
 	* now user is login we can return his info
 	 */
-	helpers.OkResponse(g, "Thank you for register in our system", models.UserResponse(*user))
+	helpers.OkResponse(g, "Thank you for register in our system", transformers.UserResponse(*user))
 }
 
 /**

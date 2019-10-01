@@ -1,11 +1,11 @@
 package main
 
 import (
-	"os"
+	"golang-starter/app/models"
 	"golang-starter/config"
-	"golang-starter/models"
 	"golang-starter/providers"
 	"golang-starter/seeders"
+	"os"
 )
 
 func main() {

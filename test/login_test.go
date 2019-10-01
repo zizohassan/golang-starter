@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"golang-starter/config"
-	"golang-starter/models"
+	"golang-starter/app/models"
+	"golang-starter/helpers"
 	"testing"
 )
 
@@ -93,7 +94,7 @@ func TestLoginWithBlockUser(t *testing.T)  {
 func TestLoginWithMoreThan50Email(t *testing.T)  {
 	data := models.User{
 		Name:"Abdel Aziz Hassan",
-		Email:randomString(50)+"@gmail.com",
+		Email:helpers.RandomString(50)+"@gmail.com",
 		Password:"123457",
 	}
 	w := post(data , "login" , true)
@@ -113,7 +114,7 @@ func TestLoginWithMoreThan20Password(t *testing.T)  {
 	data := models.User{
 		Name:"Abdel Aziz hassan",
 		Email:"zizo199988@gmail.com",
-		Password:randomString(30),
+		Password:helpers.RandomString(30),
 	}
 	w := post(data , "login" , true)
 	assert.Equal(t, 400, w.Code)
@@ -123,7 +124,7 @@ func TestLoginWithLessThan4Password(t *testing.T)  {
 	data := models.User{
 		Name:"Abdel Aziz hassan",
 		Email:"zizo199988@gmail.com",
-		Password:randomString(2),
+		Password:helpers.RandomString(2),
 	}
 	w := post(data , "login" , true)
 	assert.Equal(t, 400, w.Code)
