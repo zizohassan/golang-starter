@@ -98,7 +98,7 @@ func TestRecoverValidRequest(t *testing.T) {
 }
 
 /**
-* function make 
+* function make
 */
 func resetPassword() (*httptest.ResponseRecorder, models.Reset) {
 	resetRequest := models.Reset{

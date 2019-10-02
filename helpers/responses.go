@@ -64,9 +64,18 @@ func OkResponse(g *gin.Context, msg string, data map[string]interface{}) {
 }
 
 /**
+* ok with paging
+*/
+func OkResponseWithPaging(g *gin.Context, msg string, data *Paginator) {
+	var errors map[string]string
+	response(g, msg, data, errors, http.StatusOK, 200, true)
+	return
+}
+
+/**
 * stander response
 */
-func response(g *gin.Context, msg string, data map[string]interface{}, errors map[string]string, httpStatus int, code int, status bool) {
+func response(g *gin.Context, msg string, data interface{}, errors map[string]string, httpStatus int, code int, status bool) {
 	g.JSON(httpStatus, gin.H{
 		"status":  status,
 		"message": msg,

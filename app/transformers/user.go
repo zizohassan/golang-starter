@@ -18,11 +18,12 @@ func UserResponse(user models.User) map[string]interface{} {
 /**
 * stander the Multi users response
  */
-func UsersResponse(users []models.User) map[uint]map[string]interface{} {
-	var u = make(map[uint]map[string]interface{})
-	for _, user := range users {
-		u[user.ID] = UserResponse(user)
+func UsersResponse(users []models.User) []map[string]interface{} {
+	var u  = make([]map[string]interface{} , 0)
+	for _ , user := range users {
+		u = append(u , UserResponse(user))
 	}
 	return u
+
 }
 
