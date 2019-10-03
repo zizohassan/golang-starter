@@ -9,10 +9,8 @@ import (
 /**
 * validate store category request
  */
-func Store(r *http.Request , category *models.Category) *govalidator.Validator {
-	/**
-	*  Validation rules
-	 */
+func StoreUpdate(r *http.Request , category *models.Category) *govalidator.Validator {
+	/// Validation rules
 	rules := govalidator.MapData{
 		"name":    []string{"required", "min:6", "max:50"},
 		"status":  []string{"required", "between:1,2"},

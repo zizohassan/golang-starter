@@ -10,6 +10,5 @@ import (
 */
 func Auth(r *gin.RouterGroup) *gin.RouterGroup {
 
-
 	return r
 }

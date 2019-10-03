@@ -10,8 +10,9 @@ import (
 * admin only  will have access this routes
  */
 func Admin(r *gin.RouterGroup) *gin.RouterGroup {
-	r.GET("categories" , categories.Index)
-	r.POST("categories/store" , categories.Store)
+	/// category routes
+	categories.Routes(r)
+
 	return r
 }
 

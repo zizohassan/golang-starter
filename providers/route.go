@@ -15,16 +15,12 @@ func Routing(r *gin.Engine) *gin.Engine {
 	{
 		routes.Admin(admin)
 	}
-	/**
-	* Auth users only can access these routes
-	 */
+	/// Auth users only can access these routes
 	auth := r.Group(os.Getenv("AUTH_SLUG"))
 	{
 		routes.Auth(auth)
 	}
-	/**
-	* any one can access this routes
-	 */
+	/// any one can access this routes
 	visitor := r.Group(os.Getenv("VISTORS_SLUG"))
 	{
 		routes.Visitor(visitor)

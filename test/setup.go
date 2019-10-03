@@ -17,9 +17,7 @@ import (
 * init gin and return gin engine
  */
 func setupRouter(migrate bool) *gin.Engine {
-	/**
-	* drop database
-	 */
+	// drop database
 	config.ConnectToDatabase()
 	/***
 	* migrate tables new instance control if we must drop all tables
@@ -28,9 +26,7 @@ func setupRouter(migrate bool) *gin.Engine {
 	if migrate {
 		models.MigrateAllTable(os.Getenv("TEST_MODEL_PATH"))
 	}
-	/**
-	* start gin
-	 */
+	/// start gin
 	r := providers.Gin()
 	return providers.Routing(r)
 }
@@ -39,10 +35,40 @@ func setupRouter(migrate bool) *gin.Engine {
 * post request
  */
 func post(data interface{}, url string, migrate bool) *httptest.ResponseRecorder {
+	return  request(data  ,url  , migrate , "POST")
+}
+
+/**
+* Put request
+ */
+func put(data interface{}, url string, migrate bool) *httptest.ResponseRecorder {
+	return  request(data  ,url  , migrate , "PUT")
+}
+
+/**
+* Get request
+ */
+func get(url string, migrate bool) *httptest.ResponseRecorder {
+	var data interface{}
+	return  request( data ,url  , migrate , "GET")
+}
+
+/**
+* Get request
+ */
+func deleter(url string, migrate bool) *httptest.ResponseRecorder {
+	var data interface{}
+	return  request( data ,url  , migrate , "DELETE")
+}
+
+/**
+* Make new request
+*/
+func request(data interface{}, url string, migrate bool , RequestType string) *httptest.ResponseRecorder {
 	router := setupRouter(migrate)
 	w := httptest.NewRecorder()
 	sendData, _ := json.Marshal(&data)
-	req, _ := http.NewRequest("POST", url, bytes.NewReader(sendData))
+	req, _ := http.NewRequest(RequestType, url, bytes.NewReader(sendData))
 	router.ServeHTTP(w, req)
 	return w
 }

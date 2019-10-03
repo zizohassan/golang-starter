@@ -10,9 +10,7 @@ import (
 * validate login request
 */
 func Login(r *http.Request , login *models.Login) *govalidator.Validator {
-	/**
-	*  Validation rules
-	*/
+	/// Validation rules
 	rules := govalidator.MapData{
 		"email":    []string{"required", "min:6", "max:50", "email"},
 		"password": []string{"required", "between:6,20"},
@@ -30,9 +28,7 @@ func Login(r *http.Request , login *models.Login) *govalidator.Validator {
 * validate register request
  */
 func Register(r *http.Request , user *models.User) *govalidator.Validator {
-	/**
-	*  Validation rules
-	 */
+	/// Validation rules
 	rules := govalidator.MapData{
 		"email":    []string{"required", "min:6", "max:50", "email"},
 		"name":     []string{"required", "min:4", "max:50"},
@@ -51,9 +47,7 @@ func Register(r *http.Request , user *models.User) *govalidator.Validator {
 * validate Reset request
  */
 func Reset(r *http.Request , user *models.Reset) *govalidator.Validator {
-	/**
-	*  Validation rules
-	 */
+	/// Validation rules
 	rules := govalidator.MapData{
 		"email":    []string{"required", "min:6", "max:50", "email"},
 	}
@@ -70,9 +64,7 @@ func Reset(r *http.Request , user *models.Reset) *govalidator.Validator {
 * validate Recover request
  */
 func Recover(r *http.Request , user *models.Recover) *govalidator.Validator {
-	/**
-	*  Validation rules
-	 */
+	/// Validation rules
 	rules := govalidator.MapData{
 		"token":    []string{"required"},
 		"password": []string{"required", "between:6,20"},

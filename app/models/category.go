@@ -23,3 +23,10 @@ type Category struct {
 func (s *MigrationTables) CategoryMigrate() {
 	config.DB.AutoMigrate(&Category{})
 }
+
+/**
+* you can update these column only
+*/
+func FillAbleColumn() []string {
+	return []string{"name" , "status"}
+}

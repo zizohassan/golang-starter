@@ -9,9 +9,7 @@ import (
 * add cross origin middleware
 */
 func Gin() *gin.Engine {
-	/**
-	* init gin
-	*/
+	/// init gin
 	r := gin.Default()
 	/**
 	* Run Default middleware

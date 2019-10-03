@@ -64,6 +64,16 @@ func OkResponse(g *gin.Context, msg string, data map[string]interface{}) {
 }
 
 /**
+* ok response without data
+ */
+func OkResponseWithOutData(g *gin.Context, msg string) {
+	var errors map[string]string
+	var data map[string]interface{}
+	response(g, msg, data, errors, http.StatusOK, 200, true)
+	return
+}
+
+/**
 * ok with paging
 */
 func OkResponseWithPaging(g *gin.Context, msg string, data *Paginator) {
