@@ -4,6 +4,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"golang-starter/app/models"
 	"golang-starter/config"
+	"golang-starter/helpers"
 	"gopkg.in/thedevsaddam/gojsonq.v2"
 	"net/http/httptest"
 	"testing"
@@ -11,57 +12,14 @@ import (
 )
 
 /***
-* check if user not send any required data
- */
-func TestResetWithoutEmail(t *testing.T) {
-	data := models.User{
-	}
-	w := post(data, "reset", true)
-	assert.Equal(t, 400, w.Code)
-}
-
-/***
-* check if user not send any required data
- */
-func TestResetWithNotValidEmail(t *testing.T) {
-	data := models.User{
-		Email: "zizo199988",
-	}
-	w := post(data, "reset", true)
-	assert.Equal(t, 400, w.Code)
-}
-
-/***
 * first register new user
 * send valid request to reset email
- */
+*/
 func TestResetValidRequest(t *testing.T) {
-	w, _ := registerNewUser()
+	w, _ := registerNewUser(true)
 	assert.Equal(t, 200, w.Code)
-	r, _ := resetPassword()
+	r, _ := resetPassword(false)
 	assert.Equal(t, 200, r.Code)
-}
-
-/***
-* send recover request without token
- */
-func TestRecoverWithoutToken(t *testing.T) {
-	data := models.Recover{
-		Password: "123456",
-	}
-	w := post(data, "recover", true)
-	assert.Equal(t, 400, w.Code)
-}
-
-/***
-* send recover request without password
- */
-func TestRecoverWithoutPassword(t *testing.T) {
-	data := models.Recover{
-		Token: "77127127217219441273812371923",
-	}
-	w := post(data, "recover", true)
-	assert.Equal(t, 400, w.Code)
 }
 
 /***
@@ -72,12 +30,11 @@ func TestRecoverValidRequest(t *testing.T) {
 	/**
 	* first send register request to register new user
 	 */
-	w, data := registerNewUser()
-	assert.Equal(t, 200, w.Code)
+	_, data := registerNewUser(true)
 	/***
 	* send reset password with the user email
 	 */
-	r, _ := resetPassword()
+	r, _ := resetPassword(false)
 	assert.Equal(t, 200, r.Code)
 	/***
 	* send recover password then check if it not equal with the old data
@@ -88,7 +45,7 @@ func TestRecoverValidRequest(t *testing.T) {
 		Token:    user.Token,
 		Password: "123412312",
 	}
-	c := post(recoverRequest, "recover", false)
+	c := postWitOutHeader(recoverRequest, "recover", false)
 	time.Sleep(100000)
 	responseData := responseData(c.Result().Body)
 	recoverResponse := gojsonq.New().JSONString(responseData)
@@ -98,13 +55,62 @@ func TestRecoverValidRequest(t *testing.T) {
 }
 
 /**
-* function make
-*/
-func resetPassword() (*httptest.ResponseRecorder, models.Reset) {
+* Test Required inputs
+ */
+func TestResetRequireInputs(t *testing.T) {
+	///not send email
+	checkPostRequestWithOutHeadersDataIsValid(t, models.Reset{
+
+	}, "reset", true)
+	/// do not send token
+	checkPostRequestWithOutHeadersDataIsValid(t, models.Recover{
+		Password: "123232323",
+	}, "recover", true)
+	/// do not send password
+	checkPostRequestWithOutHeadersDataIsValid(t, models.Recover{
+		Token: "123232323",
+	}, "recover", true)
+}
+
+/**
+* Test not valid inputs
+ */
+func TestResetNotValidInputs(t *testing.T) {
+	///not valid email
+	checkPostRequestWithOutHeadersDataIsValid(t, models.User{
+		Email: "sasdasd",
+	}, "reset", true)
+}
+
+/**
+* Test inputs limitaion
+ */
+func TestResetInputsLimitation(t *testing.T) {
+	///min email fails
+	checkPostRequestWithOutHeadersDataIsValid(t, models.User{
+		Email: "s@s.i",
+	}, "reset", true)
+	///max email fail
+	checkPostRequestWithOutHeadersDataIsValid(t, models.User{
+		Email: helpers.RandomString(50) + "@gmail.com",
+	}, "reset", true)
+	///max password fail
+	checkPostRequestWithOutHeadersDataIsValid(t, models.User{
+		Password:helpers.RandomString(50),
+		Token:"21323123123123",
+	}, "reset", true)
+	///min password fail
+	checkPostRequestWithOutHeadersDataIsValid(t, models.User{
+		Password:helpers.RandomString(5),
+		Token:"21323123123123",
+	}, "reset", true)
+}
+
+func resetPassword(migrate bool) (*httptest.ResponseRecorder, models.Reset) {
 	resetRequest := models.Reset{
 		Email: "zizo199988@gmail.com",
 	}
-	r := post(resetRequest, "reset", false)
+	r := postWitOutHeader(resetRequest, "reset", migrate)
 	time.Sleep(100000)
 	return r, resetRequest
 }

@@ -1,10 +1,9 @@
 package test
 
 import (
-	"fmt"
 	"github.com/stretchr/testify/assert"
-	"golang-starter/config"
 	"golang-starter/app/models"
+	"golang-starter/config"
 	"golang-starter/helpers"
 	"testing"
 )
@@ -14,56 +13,39 @@ import (
 * login with this data
 */
 func TestLoginWithValidData(t *testing.T)  {
-	data := models.User{
-		Email:"zizo199988@gmail.com",
-		Password:"123457",
-		Name:"Abdel Aziz Hassan",
+	registerNewUser(true)
+	loginData := models.User{
+		Email:    "zizo199988@gmail.com",
+		Password: "123457",
 	}
-	w := post(data , "register" , true)
-	assert.Equal(t, 200, w.Code)
-	l := post(data , "login" , false)
+	l := postWitOutHeader(loginData , "login" , false)
 	assert.Equal(t, 200, l.Code)
 }
 
 /**
 * register with valid data
-* login with not valid data
+* login with not valid email
 */
 func TestLoginWithNotValidEmail(t *testing.T)  {
-	data := models.User{
-		Email:"zizo199988@gmail.com",
-		Password:"123457",
-		Name:"Abdel Aziz Hassan",
-	}
-	w := post(data , "register" , true)
-	assert.Equal(t, 200, w.Code)
-	loginData := models.User{
+	registerNewUser(true)
+	loginData := models.Login{
 		Email:"zizo@gmail.com",
 		Password:"123457",
 	}
-	l := post(loginData , "login" , false)
+	l := postWitOutHeader(loginData , "login" , false)
 	assert.Equal(t, 404, l.Code)
 }
-
-
 /**
 * register with valid data
-* login with not valid data
- */
+* login with not valid password
+*/
 func TestLoginWithNotValidPassword(t *testing.T)  {
-	data := models.User{
-		Email:"zizo199988@gmail.com",
-		Password:"123457",
-		Name:"Abdel Aziz Hassan",
-	}
-	w := post(data , "register" , true)
-	assert.Equal(t, 200, w.Code)
-	loginData := models.User{
+	registerNewUser(true)
+	loginData := models.Login{
 		Email:"zizo199988@gmail.com",
 		Password:"12345745",
 	}
-	l := post(loginData , "login" , false)
-	fmt.Println(l)
+	l := postWitOutHeader(loginData , "login" , false)
 	assert.Equal(t, 404, l.Code)
 }
 
@@ -71,61 +53,65 @@ func TestLoginWithNotValidPassword(t *testing.T)  {
 * register with valid data
 * login with block user
  */
-func TestLoginWithBlockUser(t *testing.T)  {
-	data := models.User{
-		Email:"zizo199988@gmail.com",
-		Password:"123457",
-		Name:"Abdel Aziz Hassan",
+func TestLoginWithBlockUser(t *testing.T) {
+	registerNewUser(true)
+	var user models.User
+	config.DB.First(&user).Update("block", 1)
+	loginData := models.Login{
+		Email:    user.Email,
+		Password: "123457",
 	}
-	w := post(data , "register" , true)
-	assert.Equal(t, 200, w.Code)
-	config.DB.Model(&models.User{}).Where("email = ? " , data.Email).Update("block" , 1)
-	loginData := models.User{
-		Email:"zizo199988@gmail.com",
-		Password:"123457",
-	}
-	l := post(loginData , "login" , false)
+	l := postWitOutHeader(loginData, "login", false)
 	assert.Equal(t, 403, l.Code)
 }
 
 /**
-* check input length
+* Test Required inputs
  */
-func TestLoginWithMoreThan50Email(t *testing.T)  {
-	data := models.User{
-		Name:"Abdel Aziz Hassan",
-		Email:helpers.RandomString(50)+"@gmail.com",
-		Password:"123457",
-	}
-	w := post(data , "login" , true)
-	assert.Equal(t, 400, w.Code)
+func TestLoginRequireInputs(t *testing.T) {
+	///not send email
+	checkPostRequestWithOutHeadersDataIsValid(t, models.Login{
+		Password: "123457",
+	}, "login", true)
+	///not send password
+	checkPostRequestWithOutHeadersDataIsValid(t, models.Login{
+		Email: "zizo199988@gmail.com",
+	}, "login", true)
 }
 
-func TestLoginWithLessThan7Email(t *testing.T)  {
-	data := models.User{
-		Email:"m@m.i",
-		Password:"123457",
-	}
-	w := post(data , "login" , true)
-	assert.Equal(t, 400, w.Code)
+/**
+* Test not valid inputs
+ */
+func TestLoginNotValidInputs(t *testing.T) {
+	///not valid email
+	checkPostRequestWithOutHeadersDataIsValid(t, models.Login{
+		Email:    "sasdasd",
+		Password: "123457",
+	}, "login", true)
 }
 
-func TestLoginWithMoreThan20Password(t *testing.T)  {
-	data := models.User{
-		Name:"Abdel Aziz hassan",
-		Email:"zizo199988@gmail.com",
-		Password:helpers.RandomString(30),
-	}
-	w := post(data , "login" , true)
-	assert.Equal(t, 400, w.Code)
-}
-
-func TestLoginWithLessThan4Password(t *testing.T)  {
-	data := models.User{
-		Name:"Abdel Aziz hassan",
-		Email:"zizo199988@gmail.com",
-		Password:helpers.RandomString(2),
-	}
-	w := post(data , "login" , true)
-	assert.Equal(t, 400, w.Code)
+/**
+* Test inputs limitaion
+ */
+func TestLoginInputsLimitation(t *testing.T) {
+	///min email fails
+	checkPostRequestWithOutHeadersDataIsValid(t, models.Login{
+		Email:    "s@s.i",
+		Password: "123457",
+	}, "login", true)
+	///max email fail
+	checkPostRequestWithOutHeadersDataIsValid(t, models.Login{
+		Email:    helpers.RandomString(50) + "@gmail.com",
+		Password: "123457",
+	}, "login", true)
+	///max password fails
+	checkPostRequestWithOutHeadersDataIsValid(t, models.Login{
+		Email:    "zizohassan@gmail.com",
+		Password: helpers.RandomString(52),
+	}, "login", true)
+	///min password fails
+	checkPostRequestWithOutHeadersDataIsValid(t, models.Login{
+		Email:    "zizohassan@gmail.com",
+		Password: helpers.RandomString(5),
+	}, "login", true)
 }

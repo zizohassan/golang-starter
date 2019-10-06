@@ -2,6 +2,7 @@ package providers
 
 import (
 	"github.com/gin-gonic/gin"
+	"golang-starter/app/middleware"
 	"os"
 	"golang-starter/routes"
 )
@@ -12,11 +13,13 @@ import (
 */
 func Routing(r *gin.Engine) *gin.Engine {
 	admin := r.Group(os.Getenv("ADMIN_SLUG"))
+	admin.Use(middleware.Admin())
 	{
 		routes.Admin(admin)
 	}
 	/// Auth users only can access these routes
 	auth := r.Group(os.Getenv("AUTH_SLUG"))
+	admin.Use(middleware.Auth())
 	{
 		routes.Auth(auth)
 	}

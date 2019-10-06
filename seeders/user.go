@@ -11,19 +11,23 @@ import (
 * 	Example :  file is user function must be UserSeeder
 */
 func (s *Seeder) UserSeeder() {
+	newUser(true)
 	for i := 0 ; i < 10 ; i++ {
-		newUser()
+		newUser(false)
 	}
 }
 
 /**
 * fake data and create data base
 */
-func newUser()  {
+func newUser(admin bool)  {
 	data := models.User{
 		Email:    faker.Internet().Email()  ,
 		Password: faker.Internet().Password(8, 14),
 		Name:     faker.Internet().UserName(),
+	}
+	if admin {
+		data.Role = 2
 	}
 	config.DB.Create(&data)
 }

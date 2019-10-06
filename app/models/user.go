@@ -57,6 +57,7 @@ func (user *User) BeforeCreate(scope *gorm.Scope) error {
 	scope.SetColumn("password", password)
 	scope.SetColumn("role", 1)
 	scope.SetColumn("block", 2)
+
 	return nil
 }
 

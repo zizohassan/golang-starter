@@ -12,8 +12,8 @@ import (
 */
 type Category struct {
 	gorm.Model
-	Name     string `gorm:"type:varchar(50);" json:"name"`
-	Status   int    `gorm:"type:tinyint(1);" json:"status"`
+	Name     string       `gorm:"type:varchar(50);" json:"name"`
+	Status   int           `gorm:"type:tinyint(1);" json:"status"`
 }
 
 /**

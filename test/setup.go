@@ -3,6 +3,7 @@ package test
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"golang-starter/app/models"
 	"golang-starter/config"
@@ -12,6 +13,17 @@ import (
 	"net/http/httptest"
 	"os"
 )
+
+/**
+* define struct that carry the arg of request
+ */
+type RequestData struct {
+	Migrate     bool
+	RequestType string
+	Url         string
+	Data        interface{}
+	Header      map[string]string
+}
 
 /**
 * init gin and return gin engine
@@ -34,42 +46,94 @@ func setupRouter(migrate bool) *gin.Engine {
 /**
 * post request
  */
-func post(data interface{}, url string, migrate bool) *httptest.ResponseRecorder {
-	return  request(data  ,url  , migrate , "POST")
+func post(data interface{}, url string, migrate bool, headers map[string]string) *httptest.ResponseRecorder {
+	return request(RequestData{
+		Url:         url,
+		Migrate:     migrate,
+		RequestType: "POST",
+		Data:        data,
+		Header:      headers,
+	})
+}
+
+func postWitOutHeader(data interface{}, url string, migrate bool) *httptest.ResponseRecorder {
+	return request(RequestData{
+		Url:         url,
+		Migrate:     migrate,
+		RequestType: "POST",
+		Data:        data,
+	})
 }
 
 /**
 * Put request
  */
-func put(data interface{}, url string, migrate bool) *httptest.ResponseRecorder {
-	return  request(data  ,url  , migrate , "PUT")
+func put(data interface{}, url string, migrate bool, headers map[string]string) *httptest.ResponseRecorder {
+	return request(RequestData{
+		Url:         url,
+		Migrate:     migrate,
+		RequestType: "PUT",
+		Data:        data,
+		Header:      headers,
+	})
+}
+
+func putWithOutHeader(data interface{}, url string, migrate bool) *httptest.ResponseRecorder {
+	return request(RequestData{
+		Url:         url,
+		Migrate:     migrate,
+		RequestType: "PUT",
+		Data:        data,
+	})
 }
 
 /**
 * Get request
  */
-func get(url string, migrate bool) *httptest.ResponseRecorder {
-	var data interface{}
-	return  request( data ,url  , migrate , "GET")
+func get(url string, migrate bool, headers map[string]string) *httptest.ResponseRecorder {
+	return request(RequestData{
+		Url:         url,
+		Migrate:     migrate,
+		RequestType: "GET",
+		Header:      headers,
+	})
+}
+
+func getWithOutHeader(url string, migrate bool) *httptest.ResponseRecorder {
+	return request(RequestData{
+		Url:         url,
+		Migrate:     migrate,
+		RequestType: "GET",
+	})
 }
 
 /**
 * Get request
  */
-func deleter(url string, migrate bool) *httptest.ResponseRecorder {
-	var data interface{}
-	return  request( data ,url  , migrate , "DELETE")
+func deleter(url string, migrate bool, headers map[string]string) *httptest.ResponseRecorder {
+	return request(RequestData{
+		Url:         url,
+		Migrate:     migrate,
+		RequestType: "DELETE",
+		Header:      headers,
+	})
 }
 
 /**
 * Make new request
-*/
-func request(data interface{}, url string, migrate bool , RequestType string) *httptest.ResponseRecorder {
-	router := setupRouter(migrate)
+ */
+func request(request RequestData) *httptest.ResponseRecorder {
+	router := setupRouter(request.Migrate)
 	w := httptest.NewRecorder()
-	sendData, _ := json.Marshal(&data)
-	req, _ := http.NewRequest(RequestType, url, bytes.NewReader(sendData))
+	sendData, _ := json.Marshal(&request.Data)
+	req, _ := http.NewRequest(request.RequestType, request.Url, bytes.NewReader(sendData))
+	if len(request.Header) > 0 {
+		for headerName, headerValue := range request.Header {
+			req.Header.Set(headerName, headerValue)
+		}
+	}
 	router.ServeHTTP(w, req)
+	fmt.Println(w)
 	return w
 }
 
@@ -79,5 +143,5 @@ func request(data interface{}, url string, migrate bool , RequestType string) *h
 func responseData(c io.Reader) string {
 	buf := new(bytes.Buffer)
 	buf.ReadFrom(c)
-	return   buf.String()
+	return buf.String()
 }

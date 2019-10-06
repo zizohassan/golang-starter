@@ -74,6 +74,17 @@ func OkResponseWithOutData(g *gin.Context, msg string) {
 }
 
 /**
+* Not Authorize
+ */
+func ReturnYouAreNotAuthorize(g *gin.Context) {
+	var errors map[string]string
+	var data map[string]interface{}
+	var msg = "You are not Authorize"
+	response(g, msg, data, errors, 401, 401, true)
+	return
+}
+
+/**
 * ok with paging
 */
 func OkResponseWithPaging(g *gin.Context, msg string, data *Paginator) {

@@ -1,135 +1,112 @@
 package test
 
 import (
+	"github.com/stretchr/testify/assert"
 	"golang-starter/app/models"
+	"golang-starter/helpers"
 	"net/http/httptest"
 	"testing"
-	"golang-starter/helpers"
-
-	"github.com/stretchr/testify/assert"
 )
 
-/***
-* check if user not send any required data
-*/
-func TestRegisterWithoutEmail(t *testing.T)  {
-	data := models.User{
-		Password:"123457",
-		Name:"Abdel Aziz Hassan",
-	}
-	w := post(data , "register" , true)
-	assert.Equal(t, 400, w.Code)
-}
-
-func TestRegisterWithoutPassword(t *testing.T)  {
-	data := models.User{
-		Email:"zizo1999988@gmail.com",
-		Name:"Abdel Aziz Hassan",
-	}
-	w := post(data , "register" , true)
-	assert.Equal(t, 400, w.Code)
-}
-
-func TestRegisterWithoutName(t *testing.T)  {
-	data := models.User{
-		Email:"zizo1999988@gmail.com",
-		Password:"123457",
-	}
-	w := post(data , "register" , true)
-	assert.Equal(t, 400, w.Code)
-}
-
-/***
-* test if user send not valid email it will return bad request
-*/
-func TestRegisterWithWrongEmailContest(t *testing.T)  {
-	data := models.User{
-		Email:"Abdel Aziz Hassan",
-		Password:"123457",
-		Name:"Abdel Aziz Hassan",
-	}
-	w := post(data , "register" , true)
-	assert.Equal(t, 400, w.Code)
-}
-
 /**
-* check input length
+* check if user has register with email before
 */
-func TestRegisterWithMoreThan50Email(t *testing.T)  {
-	data := models.User{
-		Name:"Abdel Aziz Hassan",
-		Email:helpers.RandomString(50)+"@gmail.com",
-		Password:"123457",
-	}
-	w := post(data , "register" , true)
-	assert.Equal(t, 400, w.Code)
-}
-
-func TestRegisterWithMoreThan50Name(t *testing.T)  {
-	data := models.User{
-		Name:helpers.RandomString(70),
-		Email:"zizo199988@gmail.com",
-		Password:"123457",
-	}
-	w := post(data , "register" , true)
-	assert.Equal(t, 400, w.Code)
-}
-
-func TestRegisterWithLessThan7Email(t *testing.T)  {
-	data := models.User{
-		Email:"m@m.i",
-		Password:"123457",
-	}
-	w := post(data , "register" , true)
-	assert.Equal(t, 400, w.Code)
-}
-
-func TestRegisterWithMoreThan20Password(t *testing.T)  {
-	data := models.User{
-		Name:"Abdel Aziz hassan",
-		Email:"zizo199988@gmail.com",
-		Password:helpers.RandomString(30),
-	}
-	w := post(data , "register" , true)
-	assert.Equal(t, 400, w.Code)
-}
-
-func TestRegisterWithLessThan4Password(t *testing.T)  {
-	data := models.User{
-		Name:"Abdel Aziz hassan",
-		Email:"zizo199988@gmail.com",
-		Password:helpers.RandomString(2),
-	}
-	w := post(data , "register" , true)
-	assert.Equal(t, 400, w.Code)
+func TestRegisterWithValidCase(t *testing.T)  {
+	w , _ := registerNewUser(true)
+	assert.Equal(t, 200, w.Code)
 }
 
 /**
 * check if user has register with email before
  */
-
-func TestRegisterWithValidCase(t *testing.T)  {
-	w , _ := registerNewUser()
-	assert.Equal(t, 200, w.Code)
-}
-
-/**
-* check if user has register with email before
-*/
 func TestRegisterWithExistEmail(t *testing.T)  {
-	w , data := registerNewUser()
+	w , data := registerNewUser(true)
 	assert.Equal(t, 200, w.Code)
-	k := post(data , "register" , false)
+	k := postWitOutHeader(data , "register" , false)
 	assert.Equal(t, 409, k.Code)
 }
 
+/**
+* Test Required inputs
+*/
+func TestRegisterRequireInputs(t *testing.T) {
+	///not send email
+	checkPostRequestWithOutHeadersDataIsValid(t, models.User{
+		Password: "123457",
+		Name:     "Abdel Aziz Hassan",
+	}, "register", true)
+	///not send name
+	checkPostRequestWithOutHeadersDataIsValid(t, models.User{
+		Email:    "zizo199988@gmail.com",
+		Password: "123457",
+	}, "register", true)
+	///not send password
+	checkPostRequestWithOutHeadersDataIsValid(t, models.User{
+		Email: "zizo199988@gmail.com",
+		Name:  "Abdel Aziz Hassan",
+	}, "register", true)
+}
 
-func registerNewUser() (*httptest.ResponseRecorder, models.User) {
+/**
+* Test not valid inputs
+ */
+func TestRegisterNotValidInputs(t *testing.T) {
+	///not valid email
+	checkPostRequestWithOutHeadersDataIsValid(t, models.User{
+		Email:    "sasdasd",
+		Password: "123457",
+		Name:     "Abdel Aziz Hassan",
+	}, "register", true)
+}
+
+/**
+* Test inputs limitaion
+*/
+func TestRegisterInputsLimitation(t *testing.T) {
+	///min email fails
+	checkPostRequestWithOutHeadersDataIsValid(t, models.User{
+		Email:    "s@s.i",
+		Password: "123457",
+		Name:     "Abdel Aziz Hassan",
+	}, "register", true)
+	///max email fail
+	checkPostRequestWithOutHeadersDataIsValid(t, models.User{
+		Email:    helpers.RandomString(50) + "@gmail.com",
+		Password: "123457",
+		Name:     "Abdel Aziz Hassan",
+	}, "register", true)
+	///max password fails
+	checkPostRequestWithOutHeadersDataIsValid(t, models.User{
+		Email:    "zizohassan@gmail.com",
+		Password: helpers.RandomString(52) ,
+		Name:     "Abdel Aziz Hassan",
+	}, "register", true)
+	///min password fails
+	checkPostRequestWithOutHeadersDataIsValid(t, models.User{
+		Email:    "zizohassan@gmail.com",
+		Password: helpers.RandomString(5) ,
+		Name:     "Abdel Aziz Hassan",
+	}, "register", true)
+	///min name fails
+	checkPostRequestWithOutHeadersDataIsValid(t, models.User{
+		Email:    "zizohassan@gmail.com",
+		Password: "123457",
+		Name:     helpers.RandomString(3),
+	}, "register", true)
+	///max name fails
+	checkPostRequestWithOutHeadersDataIsValid(t, models.User{
+		Email:    "zizohassan@gmail.com",
+		Password: "123457",
+		Name:     helpers.RandomString(55),
+	}, "register", true)
+}
+
+func registerNewUser(migrate bool) (*httptest.ResponseRecorder, models.User) {
 	data := models.User{
 		Email:    "zizo199988@gmail.com",
 		Password: "123457",
 		Name:     "Abdel Aziz Hassan",
 	}
-	w := post(data, "register", true)
+	w := postWitOutHeader(data, "register", migrate)
 	return w, data
 }
