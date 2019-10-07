@@ -1,6 +1,7 @@
 package helpers
 
 import (
+	"github.com/bykovme/gotrans"
 	"github.com/gin-gonic/gin"
 	"github.com/thedevsaddam/govalidator"
 	"net/http"
@@ -25,7 +26,7 @@ func ReturnNotValidRequest(error *govalidator.Validator, g *gin.Context) bool {
 		g.JSON(
 			http.StatusBadRequest, gin.H{
 				"status":  false,
-				"message": "something not valid in your request",
+				"message": gotrans.Tr(GetCurrentLang(g), "400"),
 				"errors":  e,
 				"code":    400,
 			})
@@ -79,7 +80,7 @@ func OkResponseWithOutData(g *gin.Context, msg string) {
 func ReturnYouAreNotAuthorize(g *gin.Context) {
 	var errors map[string]string
 	var data map[string]interface{}
-	var msg = "You are not Authorize"
+	var msg = gotrans.Tr(GetCurrentLang(g), "401")
 	response(g, msg, data, errors, 401, 401, true)
 	return
 }

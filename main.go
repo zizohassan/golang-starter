@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/bykovme/gotrans"
 	"golang-starter/app/models"
 	"golang-starter/config"
 	"golang-starter/providers"
@@ -9,6 +10,13 @@ import (
 )
 
 func main() {
+	/**
+	* start multi language
+	*/
+	err := gotrans.InitLocales("public/trans")
+	if err != nil {
+		panic(err)
+	}
 	/**
 	* connect with data base logic you can edit .env file to
 	* change any connection params

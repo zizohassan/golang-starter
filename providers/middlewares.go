@@ -8,6 +8,7 @@ import (
 func middlewares(r *gin.Engine) *gin.Engine {
 	/// run cors middleware
 	r.Use(middleware.CORSMiddleware())
+	r.Use(middleware.Language())
 
 	return r
 }

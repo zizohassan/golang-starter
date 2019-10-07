@@ -1,0 +1,14 @@
+{
+  "400": "something not valid in your request",
+  "401": "You are not Authorize",
+  "done_created_item": " Item has been added",
+  "done_get_item" : "Done get item",
+  "done_delete_item" : "Item has been deleted ",
+  "item_not_found" : " Item not found ",
+  "done_update_item" : "Item has been updated  ",
+  "get_all_items" : "Here is item we have",
+  "required" : "this input is required",
+  "min" : "this input length must be more than ",
+  "max" : " this input length must be less than ",
+  "between" : "this input must be between"
+}

@@ -32,3 +32,9 @@ STMP_EMAIL_ADDRESS=
 STMP_EMAIL_PASSWORD=
 STMP_EMAIL_HOST=smtp.gmail.com
 STMP_EMAIL_PORT=587
+
+#limit of cruds
+LIMIT=30
+
+# language
+DEFAULT_LANG=en
