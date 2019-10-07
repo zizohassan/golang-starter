@@ -1,4 +1,4 @@
-package admin
+package translation
 
 import (
 	"github.com/thedevsaddam/govalidator"
@@ -9,16 +9,18 @@ import (
 /**
 * validate store category request
  */
-func StoreUpdate(r *http.Request , category *models.Category) *govalidator.Validator {
+func StoreUpdate(r *http.Request , request *models.Translation) *govalidator.Validator {
 	/// Validation rules
 	rules := govalidator.MapData{
-		"name":    []string{"required", "min:6", "max:50"},
-		"status":  []string{"required", "between:1,2"},
+		"value":    []string{"required", "min:2", "max:255"},
+		"lang":  []string{"required", "min:2", "max:10"},
+		"page":  []string{"required", "min:2", "max:30"},
+		"slug":  []string{"required", "min:2", "max:50"},
 	}
 	opts := govalidator.Options{
 		Request: r,     // request object
 		Rules:   rules, // rules map
-		Data:    category,
+		Data:    request,
 		RequiredDefault: true, // all the field to be pass the rules
 	}
 	return govalidator.New(opts)

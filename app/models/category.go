@@ -27,6 +27,6 @@ func (s *MigrationTables) CategoryMigrate() {
 /**
 * you can update these column only
 */
-func FillAbleColumn() []string {
+func CategoryFillAbleColumn() []string {
 	return []string{"name" , "status"}
 }

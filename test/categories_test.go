@@ -10,84 +10,74 @@ import (
 	"testing"
 )
 
+var categoryUrl = "admin/categories"
+
 ///// show all case
-func TestShowAll(t *testing.T) {
-	k := get("admin/categories", false, getTokenAsHeader(t , true))
+func TestCategoriesShowAll(t *testing.T) {
+	k := get(categoryUrl, false, getTokenAsHeader(t , true))
 	responseData := responseData(k.Result().Body)
 	recoverResponse := gojsonq.New().JSONString(responseData)
 	assert.Equal(t, 0.0, recoverResponse.Find("data.offset"))
 	assert.Equal(t, 200, k.Code)
 }
 
-func TestFilter(t *testing.T) {
+func TestCategoriesFilter(t *testing.T) {
 	token := getTokenAsHeader(t , true)
 	w := newCategory(t , false , token)
 	assert.Equal(t, 200, w.Code)
-	filter(t, "admin/categories?status=1", 1, "status", "equal" , token)
-	filter(t, "admin/categories?name=doctor", "Doctors", "name", "equal" , token)
-	filter(t, "admin/categories?status=4", 1, "status", "not-equal" , token)
-}
-
-func filter(t *testing.T, url string, value interface{}, key string, method string , token map[string]string ) {
-	k := get(url, false , token)
-	responseData := responseData(k.Result().Body)
-	recoverResponse := gojsonq.New().JSONString(responseData)
-	if method == "equal" {
-		assert.EqualValues(t, value, recoverResponse.Find("data.records.[0]."+key))
-	} else {
-		assert.NotEqual(t, value, recoverResponse.Find("data.records.[0]."+key))
-	}
-	assert.Equal(t, 200, k.Code)
+	filter(t, categoryUrl, 1, "status", "equal" , token)
+	filter(t, categoryUrl, "Doctors", "name", "equal" , token)
+	filter(t, categoryUrl, 1, "status", "not-equal" , token)
 }
 
 ///// show function cases
-func TestShowWithValidId(t *testing.T) {
+func TestCategoriesShowWithValidId(t *testing.T) {
 	token := getTokenAsHeader(t , true)
 	w := newCategory(t , false , token)
 	assert.Equal(t, 200, w.Code)
-	k := get("admin/categories/1", false, token)
+	k := get(categoryUrl+"/1", false, token)
 	responseData := responseData(k.Result().Body)
 	recoverResponse := gojsonq.New().JSONString(responseData)
 	assert.Equal(t, "Doctors", recoverResponse.Find("data.name"))
 	assert.Equal(t, 200, k.Code)
 }
 
-func TestShowWithNotValidId(t *testing.T) {
+func TestCategoriesShowWithNotValidId(t *testing.T) {
 	token := getTokenAsHeader(t , true)
-	k := get("admin/categories/1000", false, token)
+	k := get(categoryUrl+"/1000", false, token)
 	assert.Equal(t, 404, k.Code)
 }
 
 ///// delete case
-func TestDeleteWithValidId(t *testing.T) {
+func TestCategoriesDeleteWithValidId(t *testing.T) {
 	token := getTokenAsHeader(t , true)
 	w := newCategory(t , false , token)
 	assert.Equal(t, 200, w.Code)
-	k := deleter("admin/categories/1", false, token)
+	k := deleter(categoryUrl+"/1", false, token)
 	assert.Equal(t, 200, k.Code)
 }
 
-func TestDeleteWithNotValidId(t *testing.T) {
+func TestCategoriesDeleteWithNotValidId(t *testing.T) {
 	token := getTokenAsHeader(t , true)
-	k := deleter("admin/categories/1000", false , token)
+	k := deleter(categoryUrl+"/1000", false , token)
 	assert.Equal(t, 404, k.Code)
 }
 
-func TestDeleteWithWrongRoute(t *testing.T) {
+func TestCategoriesDeleteWithWrongRoute(t *testing.T) {
 	token := getTokenAsHeader(t , true)
-	k := deleter("admin/categories", false , token)
+	k := deleter(categoryUrl, false , token)
 	assert.Equal(t, 404, k.Code)
 }
 
 
 /// valid store update cases
-func TestStoreCategoryWithValidData(t *testing.T) {
+func TestCategoriesStoreCategoryWithValidData(t *testing.T) {
 	token := getTokenAsHeader(t , true)
 	w := newCategory(t , false , token)
 	assert.Equal(t, 200, w.Code)
 }
 
-func TestUpdateCategoryWithValidData(t *testing.T) {
+func TestCategoriesUpdateCategoryWithValidData(t *testing.T) {
 	token := getTokenAsHeader(t , true)
 	_ = newCategory(t , false , token)
 	var oldRow models.Category
@@ -96,10 +86,10 @@ func TestUpdateCategoryWithValidData(t *testing.T) {
 		Name:   "New Data",
 		Status: 1,
 	}
-	k := put(data, "admin/categories/1", false, token)
+	k := put(data, categoryUrl+"/1", false, token)
 	responseData := responseData(k.Result().Body)
 	recoverResponse := gojsonq.New().JSONString(responseData)
-	assert.Equal(t, oldRow.Name, recoverResponse.Find("data.name"))
+	assert.Equal(t, data.Name, recoverResponse.Find("data.name"))
 	assert.Equal(t, 200, k.Code)
 }
 
@@ -107,18 +97,17 @@ func TestUpdateCategoryWithValidData(t *testing.T) {
 * Test Required inputs
  */
 func TestCategoriesRequireInputs(t *testing.T) {
-	url := "admin/categories"
 	token := getTokenAsHeader(t , true)
 	///not send name
 	checkPostRequestWithHeadersDataIsValid(t, models.Category{
 		Name: helpers.RandomString(4),
-	}, url, false , token)
+	}, categoryUrl, false , token)
 	///not send status
 	checkPostRequestWithHeadersDataIsValid(t, models.Category{
 		Status: 1,
-	}, url, false , token)
+	}, categoryUrl, false , token)
 	newCategory(t , false  , token)
-	url = "admin/categories/1"
+	url := categoryUrl+"/1"
 	///not send name
 	checkPutRequestWithHeadersDataIsValid(t, models.Category{
 		Name: helpers.RandomString(10),
@@ -133,31 +122,30 @@ func TestCategoriesRequireInputs(t *testing.T) {
 * Test inputs limitaion
  */
 func TestCategoriesInputsLimitation(t *testing.T) {
-	url := "admin/categories"
 	token := getTokenAsHeader(t , true)
 	///min name fails
 	checkPostRequestWithHeadersDataIsValid(t, models.Category{
 		Name: helpers.RandomString(4),
 		Status: 1,
-	}, url, false , token)
+	}, categoryUrl, false , token)
 	///max name fails
 	checkPostRequestWithHeadersDataIsValid(t, models.Category{
 		Name: helpers.RandomString(80),
 		Status: 1,
-	}, url, false , token)
+	}, categoryUrl, false , token)
 	///max status fails
 	checkPostRequestWithHeadersDataIsValid(t, models.Category{
 		Name: helpers.RandomString(10),
 		Status: 3,
-	}, url, false , token)
+	}, categoryUrl, false , token)
 	///min status fails
 	checkPostRequestWithHeadersDataIsValid(t, models.Category{
 		Name: helpers.RandomString(10),
 		Status: 0,
-	}, url, false , token)
+	}, categoryUrl, false , token)
 	///create new category
 	newCategory(t , false  , token)
-	url = "admin/categories/1"
+	url := categoryUrl+"/1"
 	///min name fails
 	checkPutRequestWithHeadersDataIsValid(t, models.Category{
 		Name: helpers.RandomString(4),
@@ -186,6 +174,6 @@ func newCategory(t *testing.T , migrate bool , token map[string]string) *httptes
 		Name:   "Doctors",
 		Status: 1,
 	}
-	w := post(data, "admin/categories", migrate, token)
+	w := post(data, categoryUrl, migrate, token)
 	return w
 }
