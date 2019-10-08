@@ -6,6 +6,10 @@ func Required(lang string) string {
 	return "required:" + gotrans.Tr(lang, "required")
 }
 
+func Email(lang string) string {
+	return "email:" + gotrans.Tr(lang, "email_not_valid")
+}
+
 func Min(lang string, number string) string {
 	return "min:" + gotrans.Tr(lang, "min") + " " + number
 }

@@ -83,6 +83,13 @@ func Register(g *gin.Context) {
 		return
 	}
 	/**
+	* set role and block
+	* role 1 is user
+	* block user (1 , 2) 2 is not block 1 is block
+	*/
+	user.Role =  1
+	user.Block = 2
+	/**
 	* create new user based on register struct
 	* token , role  , block will set with event
 	*/

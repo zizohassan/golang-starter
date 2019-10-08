@@ -5,6 +5,7 @@ import (
 	"golang-starter/app/controllers/admin/categories"
 	"golang-starter/app/controllers/admin/settings"
 	"golang-starter/app/controllers/admin/translations"
+	"golang-starter/app/controllers/admin/users"
 )
 
 /***
@@ -12,10 +13,10 @@ import (
 * admin only  will have access this routes
  */
 func Admin(r *gin.RouterGroup) *gin.RouterGroup {
-	/// category routes
 	categories.Routes(r)
 	translations.Routes(r)
 	settings.Routes(r)
+	users.Routes(r)
 
 	return r
 }

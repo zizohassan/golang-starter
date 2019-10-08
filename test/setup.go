@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/bykovme/gotrans"
 	"github.com/gin-gonic/gin"
 	"golang-starter/app/models"
 	"golang-starter/config"
@@ -29,6 +30,10 @@ type RequestData struct {
 * init gin and return gin engine
  */
 func setupRouter(migrate bool) *gin.Engine {
+	err := gotrans.InitLocales("../public/trans")
+	if err != nil {
+		panic(err)
+	}
 	// drop database
 	config.ConnectToDatabase()
 	/***

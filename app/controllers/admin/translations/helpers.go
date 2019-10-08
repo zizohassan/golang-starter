@@ -74,6 +74,6 @@ func findOrFail(g *gin.Context) (models.Translation , bool)  {
 */
 func updateColumns(row *models.Translation , oldRow models.Translation) models.Translation {
 	onlyAllowData := helpers.UpdateOnlyAllowColumns(row , models.TranslationFillAbleColumn())
-	config.DB.Model(&oldRow).Select(models.TranslationFillAbleColumn()).Updates(onlyAllowData).Find(&oldRow)
+	config.DB.Model(&oldRow).Updates(onlyAllowData).Find(&oldRow)
 	return oldRow
 }

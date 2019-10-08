@@ -10,5 +10,9 @@
   "required" : "this input is required",
   "min" : "this input length must be more than ",
   "max" : " this input length must be less than ",
-  "between" : "this input must be between"
+  "between" : "this input must be between",
+  "duplicate_data_part_one" : "this ",
+  "duplicate_data_part_two" : " already exists please try something else",
+  "email" : "Email",
+  "email_not_valid" : "this email not valid"
 }

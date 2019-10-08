@@ -18,7 +18,7 @@ func StoreUpdate(r *http.Request, request *models.Category) *govalidator.Validat
 		"status": []string{"required", "between:1,2"},
 	}
 
-	messages := govalidator.MapData{
+	 messages  := govalidator.MapData{
 		"name":   []string{helpers.Required(lang), helpers.Min(lang , "6"), helpers.Max(lang , "50")},
 		"status": []string{helpers.Required(lang) , helpers.Between(lang , "1,2")},
 	}

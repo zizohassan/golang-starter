@@ -68,6 +68,6 @@ func findOrFail(g *gin.Context) (models.Category , bool)  {
 */
 func updateColumns(row *models.Category , oldRow models.Category) models.Category  {
 	onlyAllowData := helpers.UpdateOnlyAllowColumns(row , models.CategoryFillAbleColumn())
-	config.DB.Model(&oldRow).Select(models.CategoryFillAbleColumn()).Updates(onlyAllowData).Find(&oldRow)
+	config.DB.Model(&oldRow).Updates(onlyAllowData).Find(&oldRow)
 	return oldRow
 }

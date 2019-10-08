@@ -47,16 +47,12 @@ type Recover struct {
 * event when user register
 * create token
 * hash password
-* set user role
-* set block user to not block (1 is blocked 2 is not blocked)
  */
 func (user *User) BeforeCreate(scope *gorm.Scope) error {
 	token, _ := helpers.HashPassword(user.Email + user.Password)
 	password, _ := helpers.HashPassword(user.Password)
 	scope.SetColumn("token", token)
 	scope.SetColumn("password", password)
-	scope.SetColumn("role", 1)
-	scope.SetColumn("block", 2)
 
 	return nil
 }
@@ -67,4 +63,11 @@ func (user *User) BeforeCreate(scope *gorm.Scope) error {
  */
 func (s *MigrationTables) UserMigrate() {
 	config.DB.AutoMigrate(&User{})
+}
+
+/**
+* you can update these column only
+ */
+func UserFillAbleColumn() []string {
+	return []string{"name", "email", "role", "password", "block"}
 }

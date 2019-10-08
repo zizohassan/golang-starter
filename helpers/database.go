@@ -21,11 +21,13 @@ func DbTruncate(tableName ...string) {
 * this for security
 * map struct to update
  */
-func UpdateOnlyAllowColumns(structNeedToMap interface{} , fillAble []string)  map[string]interface{} {
+func UpdateOnlyAllowColumns(structNeedToMap interface{} , fillAble []string)  interface{} {
 	row := structs.Map(structNeedToMap)
 	var data = make(map[string]interface{})
 	for _ , value  := range fillAble{
-		data[value] = row[strings.Title(value)]
+		if row[strings.Title(value)] != ""{
+			data[value] = row[strings.Title(value)]
+		}
 	}
 	return  data
 }

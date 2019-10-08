@@ -18,6 +18,29 @@ func ReturnFoundRow(g *gin.Context, msg string) {
 }
 
 /**
+* conflict
+ */
+func ReturnBadRequest(g *gin.Context) {
+	var errors map[string]string
+	var data map[string]interface{}
+	var msg = gotrans.Tr(GetCurrentLang(g), "400")
+	response(g, msg, data, errors,400, 400, false)
+	return
+}
+
+/**
+* Duplicate data
+ */
+func ReturnDuplicateData(g *gin.Context , inputName string) {
+	var errors map[string]string
+	var data map[string]interface{}
+	var msg = T(g , "duplicate_data_part_one" , inputName ,"duplicate_data_part_two")
+	response(g, msg, data, errors,400, 400, false)
+	return
+}
+
+
+/**
 * NotValidRequest response
 */
 func ReturnNotValidRequest(error *govalidator.Validator, g *gin.Context) bool {
