@@ -13,7 +13,7 @@ var settingUrl = "/admin/settings"
 
 ///// show all case
 func TestSettingsShowAll(t *testing.T) {
-	k := get(settingUrl, false, getTokenAsHeader(t, true))
+	k := get(settingUrl, false, getTokenAsHeader(true))
 	responseData := responseData(k.Result().Body)
 	recoverResponse := gojsonq.New().JSONString(responseData)
 	assert.Equal(t, 0.0, recoverResponse.Find("data.offset"))
@@ -21,7 +21,7 @@ func TestSettingsShowAll(t *testing.T) {
 }
 
 func TestSettingsFilter(t *testing.T) {
-	token := getTokenAsHeader(t, true)
+	token := getTokenAsHeader(true)
 	newSetting()
 	filter(t, settingUrl, "Facebook", "name", "equal", token)
 	filter(t, settingUrl, "facebook", "slug", "equal", token)
@@ -31,7 +31,7 @@ func TestSettingsFilter(t *testing.T) {
 
 ///// show function cases
 func TestSettingsShowWithValidId(t *testing.T) {
-	token := getTokenAsHeader(t, true)
+	token := getTokenAsHeader(true)
 	_ = newSetting()
 	k := get(settingUrl+"/1", false, token)
 	responseData := responseData(k.Result().Body)
@@ -41,14 +41,14 @@ func TestSettingsShowWithValidId(t *testing.T) {
 }
 
 func TestSettingsShowWithNotValidId(t *testing.T) {
-	token := getTokenAsHeader(t, true)
+	token := getTokenAsHeader(true)
 	k := get(settingUrl+"/1000", false, token)
 	assert.Equal(t, 404, k.Code)
 }
 
 /// valid store update cases
 func TestSettingsUpdateCategoryWithValidData(t *testing.T) {
-	token := getTokenAsHeader(t, true)
+	token := getTokenAsHeader(true)
 	_ = newSetting()
 	var oldRow models.Setting
 	config.DB.First(&oldRow)
@@ -59,7 +59,7 @@ func TestSettingsUpdateCategoryWithValidData(t *testing.T) {
 		SettingType: "text",
 	}
 	k := put(data, settingUrl+"/1", false, token)
-	assert.Equal(t, data.Name, returnResponseKey(k , "data.name"))
+	assert.Equal(t, data.Name, returnResponseKey(k, "data.name"))
 	assert.Equal(t, 200, k.Code)
 }
 
@@ -67,7 +67,7 @@ func TestSettingsUpdateCategoryWithValidData(t *testing.T) {
 * Test Required inputs
  */
 func TestSettingsRequireInputs(t *testing.T) {
-	token := getTokenAsHeader(t, true)
+	token := getTokenAsHeader(true)
 	newTranslation()
 	settingUrl := settingUrl + "/1"
 	///not send SettingType
@@ -100,65 +100,65 @@ func TestSettingsRequireInputs(t *testing.T) {
 * Test inputs Limitaion
  */
 func TestSettingsInputsLimitation(t *testing.T) {
-	token := getTokenAsHeader(t, true)
+	token := getTokenAsHeader(true)
 	///min name fails
 	newCategory(t, false, token)
 	url := settingUrl + "/1"
 	///min Name fails
 	checkPutRequestWithHeadersDataIsValid(t, models.Setting{
-		Name:  helpers.RandomString(1),
-		Slug:  helpers.RandomString(10),
-		Value: helpers.RandomString(10),
-		SettingType:  helpers.RandomString(10),
+		Name:        helpers.RandomString(1),
+		Slug:        helpers.RandomString(10),
+		Value:       helpers.RandomString(10),
+		SettingType: helpers.RandomString(10),
 	}, url, false, token)
 	///max Name fails
 	checkPutRequestWithHeadersDataIsValid(t, models.Setting{
-		Name:  helpers.RandomString(60),
-		Slug:  helpers.RandomString(10),
-		Value: helpers.RandomString(10),
-		SettingType:  helpers.RandomString(10),
+		Name:        helpers.RandomString(60),
+		Slug:        helpers.RandomString(10),
+		Value:       helpers.RandomString(10),
+		SettingType: helpers.RandomString(10),
 	}, url, false, token)
 	///min Slug fails
 	checkPutRequestWithHeadersDataIsValid(t, models.Setting{
-		Name:  helpers.RandomString(10),
-		Slug:  helpers.RandomString(1),
-		Value: helpers.RandomString(10),
-		SettingType:  helpers.RandomString(10),
+		Name:        helpers.RandomString(10),
+		Slug:        helpers.RandomString(1),
+		Value:       helpers.RandomString(10),
+		SettingType: helpers.RandomString(10),
 	}, url, false, token)
 	///max Slug fails
 	checkPutRequestWithHeadersDataIsValid(t, models.Setting{
-		Name:  helpers.RandomString(10),
-		Slug:  helpers.RandomString(60),
-		Value: helpers.RandomString(10),
-		SettingType:  helpers.RandomString(10),
+		Name:        helpers.RandomString(10),
+		Slug:        helpers.RandomString(60),
+		Value:       helpers.RandomString(10),
+		SettingType: helpers.RandomString(10),
 	}, url, false, token)
 	///min Value fails
 	checkPutRequestWithHeadersDataIsValid(t, models.Setting{
-		Name:  helpers.RandomString(10),
-		Slug:  helpers.RandomString(10),
-		Value: helpers.RandomString(1),
-		SettingType:  helpers.RandomString(10),
+		Name:        helpers.RandomString(10),
+		Slug:        helpers.RandomString(10),
+		Value:       helpers.RandomString(1),
+		SettingType: helpers.RandomString(10),
 	}, url, false, token)
 	///max Value fails
 	checkPutRequestWithHeadersDataIsValid(t, models.Setting{
-		Name:  helpers.RandomString(10),
-		Slug:  helpers.RandomString(10),
-		Value: helpers.RandomString(300),
-		SettingType:  helpers.RandomString(10),
+		Name:        helpers.RandomString(10),
+		Slug:        helpers.RandomString(10),
+		Value:       helpers.RandomString(300),
+		SettingType: helpers.RandomString(10),
 	}, url, false, token)
 	///min Slug fails
 	checkPutRequestWithHeadersDataIsValid(t, models.Setting{
-		Name:  helpers.RandomString(10),
-		Slug:  helpers.RandomString(10),
-		Value: helpers.RandomString(10),
-		SettingType:  helpers.RandomString(1),
+		Name:        helpers.RandomString(10),
+		Slug:        helpers.RandomString(10),
+		Value:       helpers.RandomString(10),
+		SettingType: helpers.RandomString(1),
 	}, url, false, token)
 	///max Slug fails
 	checkPutRequestWithHeadersDataIsValid(t, models.Setting{
-		Name:  helpers.RandomString(10),
-		Slug:  helpers.RandomString(10),
-		Value: helpers.RandomString(10),
-		SettingType:  helpers.RandomString(60),
+		Name:        helpers.RandomString(10),
+		Slug:        helpers.RandomString(10),
+		Value:       helpers.RandomString(10),
+		SettingType: helpers.RandomString(60),
 	}, url, false, token)
 
 }

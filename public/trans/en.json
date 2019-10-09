@@ -14,5 +14,6 @@
   "duplicate_data_part_one" : "this ",
   "duplicate_data_part_two" : " already exists please try something else",
   "email" : "Email",
-  "email_not_valid" : "this email not valid"
+  "email_not_valid" : "this email not valid",
+  "upload_error_code" : " Error in upload file  "
 }

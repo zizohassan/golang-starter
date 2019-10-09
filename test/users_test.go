@@ -13,13 +13,13 @@ var usersUrl = "admin/users"
 
 ///// show all case
 func TestUsersShowAll(t *testing.T) {
-	k := get(usersUrl, false, getTokenAsHeader(t, true))
+	k := get(usersUrl, false, getTokenAsHeader(true))
 	assert.Equal(t, 0.0, returnResponseKey(k, "data.offset"))
 	assert.Equal(t, 200, k.Code)
 }
 
 func TestUsersFilter(t *testing.T) {
-	token := getTokenAsHeader(t, true)
+	token := getTokenAsHeader(true)
 	w := newUser(t, false, token)
 	assert.Equal(t, 200, w.Code)
 	filter(t, usersUrl, 1, "role", "equal", token)
@@ -31,7 +31,7 @@ func TestUsersFilter(t *testing.T) {
 
 ///// show function cases
 func TestUsersShowWithValidId(t *testing.T) {
-	token := getTokenAsHeader(t, true)
+	token := getTokenAsHeader(true)
 	w := newUser(t, false, token)
 	assert.Equal(t, 200, w.Code)
 	k := get(usersUrl+"/2", false, token)
@@ -40,33 +40,33 @@ func TestUsersShowWithValidId(t *testing.T) {
 }
 
 func TestUsersShowWithNotValidId(t *testing.T) {
-	token := getTokenAsHeader(t, true)
+	token := getTokenAsHeader(true)
 	k := get(usersUrl+"/1000", false, token)
 	assert.Equal(t, 404, k.Code)
 }
 
 ///// delete case
 func TestUsersDeleteWithValidId(t *testing.T) {
-	token := getTokenAsHeader(t, true)
+	token := getTokenAsHeader(true)
 	k := deleter(usersUrl+"/1", false, token)
 	assert.Equal(t, 200, k.Code)
 }
 
 func TestUsersDeleteWithNotValidId(t *testing.T) {
-	token := getTokenAsHeader(t, true)
+	token := getTokenAsHeader(true)
 	k := deleter(usersUrl+"/1000", false, token)
 	assert.Equal(t, 404, k.Code)
 }
 
 func TestUsersDeleteWithWrongRoute(t *testing.T) {
-	token := getTokenAsHeader(t, true)
+	token := getTokenAsHeader(true)
 	k := deleter(usersUrl, false, token)
 	assert.Equal(t, 404, k.Code)
 }
 
 /// valid store update cases
 func TestStoreUsersWithValidData(t *testing.T) {
-	token := getTokenAsHeader(t, true)
+	token := getTokenAsHeader(true)
 	w := newUser(t, false, token)
 	assert.Equal(t, "Abdel Aziz", returnResponseKey(w, "data.name"))
 	assert.Equal(t, 200, w.Code)
@@ -76,13 +76,13 @@ func TestStoreUsersWithValidData(t *testing.T) {
 * check if user has register with email before
  */
 func TestAddUserWithExistEmail(t *testing.T)  {
-	token := getTokenAsHeader(t, true)
+	token := getTokenAsHeader(true)
 	k := post(existsEmailData() , usersUrl , false , token)
 	assert.Equal(t, 409, k.Code)
 }
 
 func TestUpdateUserWithExistEmail(t *testing.T)  {
-	token := getTokenAsHeader(t, true)
+	token := getTokenAsHeader(true)
 	k := post(existsEmailData() , usersUrl , false , token)
 	assert.Equal(t, 409, k.Code)
 }
@@ -91,7 +91,7 @@ func TestUpdateUserWithExistEmail(t *testing.T)  {
 * Test not valid inputs
  */
 func TestAddUserNotValidInputs(t *testing.T) {
-	token := getTokenAsHeader(t, true)
+	token := getTokenAsHeader(true)
 	///not valid email
 	checkPostRequestWithHeadersDataIsValid(t, models.User{
 		Name:  "Abdel Aziz hassan Abdel Aziz",
@@ -112,7 +112,7 @@ func TestAddUserNotValidInputs(t *testing.T) {
 
 
 func TestUpdateUsersWithValidWithOutPasswordData(t *testing.T) {
-	token := getTokenAsHeader(t, true)
+	token := getTokenAsHeader(true)
 	_ = newUser(t, false, token)
 	data := models.User{
 		Name:  "Abdel Aziz hassan Abdel Aziz",
@@ -132,7 +132,7 @@ func TestUpdateUsersWithValidWithOutPasswordData(t *testing.T) {
 }
 
 func TestUpdateUsersWithValidWithPasswordData(t *testing.T) {
-	token := getTokenAsHeader(t, true)
+	token := getTokenAsHeader(true)
 	_ = newUser(t, false, token)
 	var oldRow models.User
 	config.DB.Where("id = 2").Find(&oldRow)
@@ -159,7 +159,7 @@ func TestUpdateUsersWithValidWithPasswordData(t *testing.T) {
 * Test Required inputs
  */
 func TestUsersRequireInputs(t *testing.T) {
-	token := getTokenAsHeader(t, true)
+	token := getTokenAsHeader(true)
 	///not send name
 	checkPostRequestWithHeadersDataIsValid(t, models.User{
 		Role:  2,
@@ -230,7 +230,7 @@ func TestUsersRequireInputs(t *testing.T) {
 * Test inputs limitaion
  */
 func TestUsersInputsLimitation(t *testing.T) {
-	token := getTokenAsHeader(t, true)
+	token := getTokenAsHeader(true)
 	///min send name
 	checkPostRequestWithHeadersDataIsValid(t, models.User{
 		Name:helpers.RandomString(5),

@@ -50,5 +50,9 @@ func returnResponseKey(k *httptest.ResponseRecorder , key string) interface{} {
 
 func getDataMap(k *httptest.ResponseRecorder) map[string]interface{} {
 	interfaceData := returnResponseKey(k , "data")
-	return interfaceData.(map[string]interface{})
+	if interfaceData != nil{
+		return interfaceData.(map[string]interface{})
+	}
+	m := make(map[string]interface{})
+	return m
 }

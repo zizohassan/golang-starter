@@ -31,6 +31,17 @@ func ReturnDuplicateData(g *gin.Context, inputName string) {
 }
 
 /**
+* upload error
+ */
+func UploadError(g *gin.Context) {
+	var errors map[string]string
+	var data map[string]interface{}
+	var msg = T(g, "upload_error_code")
+	response(g, msg, data, errors, 415, 415, false)
+	return
+}
+
+/**
 * NotValidRequest response
  */
 func ReturnNotValidRequest(error *govalidator.Validator, g *gin.Context) bool {

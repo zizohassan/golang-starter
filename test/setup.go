@@ -137,6 +137,7 @@ func request(request RequestData) *httptest.ResponseRecorder {
 			req.Header.Set(headerName, headerValue)
 		}
 	}
+	fmt.Println(req)
 	router.ServeHTTP(w, req)
 	fmt.Println(w)
 	return w

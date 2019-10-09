@@ -9,6 +9,7 @@ import (
 * and only login user will have access this routes
 */
 func Auth(r *gin.RouterGroup) *gin.RouterGroup {
+	/// auth routes
 
 	return r
 }
