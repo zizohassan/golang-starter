@@ -79,7 +79,7 @@ func Register(g *gin.Context) {
 	*/
 	config.DB.Find(&user, "email = ? ", user.Email)
 	if user.ID != 0 {
-		helpers.ReturnFoundRow(g, "We found this email in our system")
+		helpers.ReturnDuplicateData(g, "email")
 		return
 	}
 	/**

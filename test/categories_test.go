@@ -5,7 +5,6 @@ import (
 	"golang-starter/app/models"
 	"golang-starter/config"
 	"golang-starter/helpers"
-	"gopkg.in/thedevsaddam/gojsonq.v2"
 	"net/http/httptest"
 	"testing"
 )
@@ -14,10 +13,8 @@ var categoryUrl = "admin/categories"
 
 ///// show all case
 func TestCategoriesShowAll(t *testing.T) {
-	k := get(categoryUrl, false, getTokenAsHeader(t , true))
-	responseData := responseData(k.Result().Body)
-	recoverResponse := gojsonq.New().JSONString(responseData)
-	assert.Equal(t, 0.0, recoverResponse.Find("data.offset"))
+	k := get(categoryUrl, false, getTokenAsHeader(t, true))
+	assert.Equal(t, 0.0, returnResponseKey(k , "data.offset"))
 	assert.Equal(t, 200, k.Code)
 }
 
@@ -36,9 +33,7 @@ func TestCategoriesShowWithValidId(t *testing.T) {
 	w := newCategory(t , false , token)
 	assert.Equal(t, 200, w.Code)
 	k := get(categoryUrl+"/1", false, token)
-	responseData := responseData(k.Result().Body)
-	recoverResponse := gojsonq.New().JSONString(responseData)
-	assert.Equal(t, "Doctors", recoverResponse.Find("data.name"))
+	assert.Equal(t, "Doctors", returnResponseKey(k , "data.name"))
 	assert.Equal(t, 200, k.Code)
 }
 
@@ -87,9 +82,7 @@ func TestCategoriesUpdateCategoryWithValidData(t *testing.T) {
 		Status: 1,
 	}
 	k := put(data, categoryUrl+"/1", false, token)
-	responseData := responseData(k.Result().Body)
-	recoverResponse := gojsonq.New().JSONString(responseData)
-	assert.Equal(t, data.Name, recoverResponse.Find("data.name"))
+	assert.Equal(t, data.Name, returnResponseKey(k , "data.name"))
 	assert.Equal(t, 200, k.Code)
 }
 

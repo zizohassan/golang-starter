@@ -5,7 +5,6 @@ import (
 	"golang-starter/app/models"
 	"golang-starter/config"
 	"golang-starter/helpers"
-	"gopkg.in/thedevsaddam/gojsonq.v2"
 	"net/http/httptest"
 	"testing"
 	"time"
@@ -47,10 +46,9 @@ func TestRecoverValidRequest(t *testing.T) {
 	}
 	c := postWitOutHeader(recoverRequest, "recover", false)
 	time.Sleep(100000)
-	responseData := responseData(c.Result().Body)
-	recoverResponse := gojsonq.New().JSONString(responseData)
-	assert.NotEqual(t, user.Token, recoverResponse.Find("data.token"))
-	assert.NotEqual(t, user.Password, recoverResponse.Find("data.password"))
+	d := getDataMap(c)
+	assert.NotEqual(t, user.Token, d["token"])
+	assert.NotEqual(t, user.Password, d["password"])
 	assert.Equal(t, 200, c.Code)
 }
 

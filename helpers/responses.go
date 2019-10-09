@@ -7,15 +7,6 @@ import (
 	"net/http"
 )
 
-/**
-* conflict
-*/
-func ReturnFoundRow(g *gin.Context, msg string) {
-	var errors map[string]string
-	var data map[string]interface{}
-	response(g, msg, data, errors, http.StatusConflict, 409, false)
-	return
-}
 
 /**
 * conflict
@@ -24,25 +15,24 @@ func ReturnBadRequest(g *gin.Context) {
 	var errors map[string]string
 	var data map[string]interface{}
 	var msg = gotrans.Tr(GetCurrentLang(g), "400")
-	response(g, msg, data, errors,400, 400, false)
+	response(g, msg, data, errors, 400, 400, false)
 	return
 }
 
 /**
 * Duplicate data
  */
-func ReturnDuplicateData(g *gin.Context , inputName string) {
+func ReturnDuplicateData(g *gin.Context, inputName string) {
 	var errors map[string]string
 	var data map[string]interface{}
-	var msg = T(g , "duplicate_data_part_one" , inputName ,"duplicate_data_part_two")
-	response(g, msg, data, errors,400, 400, false)
+	var msg = T(g, "duplicate_data_part_one", inputName, "duplicate_data_part_two")
+	response(g, msg, data, errors, 409, 409, false)
 	return
 }
 
-
 /**
 * NotValidRequest response
-*/
+ */
 func ReturnNotValidRequest(error *govalidator.Validator, g *gin.Context) bool {
 	e := error.ValidateJSON()
 	if len(e) > 0 {
@@ -60,7 +50,7 @@ func ReturnNotValidRequest(error *govalidator.Validator, g *gin.Context) bool {
 
 /**
 * NotFound response
-*/
+ */
 func ReturnNotFound(g *gin.Context, msg string) {
 	var errors map[string]string
 	var data map[string]interface{}
@@ -70,7 +60,7 @@ func ReturnNotFound(g *gin.Context, msg string) {
 
 /**
 * Forbidden response
-*/
+ */
 func ReturnForbidden(g *gin.Context, msg string) {
 	var errors map[string]string
 	var data map[string]interface{}
@@ -80,7 +70,7 @@ func ReturnForbidden(g *gin.Context, msg string) {
 
 /**
 * ok response with data
-*/
+ */
 func OkResponse(g *gin.Context, msg string, data map[string]interface{}) {
 	var errors map[string]string
 	response(g, msg, data, errors, http.StatusOK, 200, true)
@@ -110,7 +100,7 @@ func ReturnYouAreNotAuthorize(g *gin.Context) {
 
 /**
 * ok with paging
-*/
+ */
 func OkResponseWithPaging(g *gin.Context, msg string, data *Paginator) {
 	var errors map[string]string
 	response(g, msg, data, errors, http.StatusOK, 200, true)
@@ -119,7 +109,7 @@ func OkResponseWithPaging(g *gin.Context, msg string, data *Paginator) {
 
 /**
 * stander response
-*/
+ */
 func response(g *gin.Context, msg string, data interface{}, errors map[string]string, httpStatus int, code int, status bool) {
 	g.JSON(httpStatus, gin.H{
 		"status":  status,
@@ -130,4 +120,3 @@ func response(g *gin.Context, msg string, data interface{}, errors map[string]st
 	})
 	return
 }
-

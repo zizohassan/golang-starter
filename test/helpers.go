@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/thedevsaddam/gojsonq.v2"
+	"net/http/httptest"
 	"testing"
 	_ "testing"
 )
@@ -39,4 +40,15 @@ func filter(t *testing.T, url string, value interface{}, key string, method stri
 		assert.NotEqual(t, value, recoverResponse.Find("data.records.[0]."+key))
 	}
 	assert.Equal(t, 200, k.Code)
+}
+
+func returnResponseKey(k *httptest.ResponseRecorder , key string) interface{} {
+	responseData := responseData(k.Result().Body)
+	recoverResponse := gojsonq.New().JSONString(responseData)
+	return recoverResponse.Find(key)
+}
+
+func getDataMap(k *httptest.ResponseRecorder) map[string]interface{} {
+	interfaceData := returnResponseKey(k , "data")
+	return interfaceData.(map[string]interface{})
 }

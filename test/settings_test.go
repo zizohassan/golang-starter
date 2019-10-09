@@ -59,9 +59,7 @@ func TestSettingsUpdateCategoryWithValidData(t *testing.T) {
 		SettingType: "text",
 	}
 	k := put(data, settingUrl+"/1", false, token)
-	responseData := responseData(k.Result().Body)
-	recoverResponse := gojsonq.New().JSONString(responseData)
-	assert.Equal(t, data.Name, recoverResponse.Find("data.name"))
+	assert.Equal(t, data.Name, returnResponseKey(k , "data.name"))
 	assert.Equal(t, 200, k.Code)
 }
 

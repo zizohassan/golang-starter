@@ -34,9 +34,7 @@ func TestTranslationsShowWithValidId(t *testing.T) {
 	token := getTokenAsHeader(t, true)
 	_ = newTranslation()
 	k := get(translationUrl+"/1", false, token)
-	responseData := responseData(k.Result().Body)
-	recoverResponse := gojsonq.New().JSONString(responseData)
-	assert.Equal(t, "home", recoverResponse.Find("data.page"))
+	assert.Equal(t, "home", returnResponseKey(k , "data.page"))
 	assert.Equal(t, 200, k.Code)
 }
 
