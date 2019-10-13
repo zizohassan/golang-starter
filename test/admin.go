@@ -14,6 +14,7 @@ func getTokenAsHeader(migrate bool) map[string]string {
 	token := addAdminUser(migrate)
 	var authToken = make(map[string]string)
 	authToken["Authorization"] = token
+
 	return authToken
 }
 
@@ -36,6 +37,7 @@ func addAdminUser(migrate bool) string {
 		Password: "1234567",
 	}
 	config.DB.Create(&data)
+
 	return data.Token
 }
 

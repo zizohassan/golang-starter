@@ -13,9 +13,12 @@ import (
 func (s *Seeder) TranslationSeeder() {
 	pages := pages()
 	languages := languages()
-	for _, page := range pages {
+	attr := globalAttrs()
+	for index, page := range pages {
 		for _, lang := range languages {
-			newTranslation(page, lang)
+			for _, at := range attr {
+				newTranslation(index+1, page, lang, at)
+			}
 		}
 	}
 }
@@ -23,29 +26,26 @@ func (s *Seeder) TranslationSeeder() {
 /**
 * fake data and create data base
  */
-func newTranslation(pageName string, lang string) {
+func newTranslation(pageId int, pageName string, lang string, slug string) {
 	data := models.Translation{
-		Slug:  pageName,
-		Page:  strings.Title(pageName),
-		Lang:  lang,
-		Value: strings.Title(pageName),
+		Slug:   slug,
+		PageId: pageId,
+		Lang:   lang,
+		Value:  strings.Title(pageName),
 	}
 	config.DB.Create(&data)
-}
-
-func pages() []string {
-	return []string{
-		"home",
-		"about",
-		"contact",
-		"terms",
-		"police",
-	}
 }
 
 func languages() []string {
 	return []string{
 		"en",
 		"ar",
+	}
+}
+
+func globalAttrs() []string {
+	return []string{
+		"title",
+		"des",
 	}
 }

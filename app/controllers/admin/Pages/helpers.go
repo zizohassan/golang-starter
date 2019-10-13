@@ -1,29 +1,23 @@
-package translations
+package pages
 
 import (
 	"github.com/gin-gonic/gin"
 	"golang-starter/app/models"
-	"golang-starter/app/requests/admin/translation"
+	"golang-starter/app/requests/admin/page"
 	"golang-starter/config"
 	"golang-starter/helpers"
 )
 
 /**
 * filter module with some columns
- */
+*/
 func filter(g *gin.Context) []string {
 	var filter []string
-	if  g.Query("value") != ""{
-		filter = append(filter, `value like "%` + g.Query("value") + `%"`)
+	if  g.Query("status") != ""{
+		filter = append(filter, "status = " + g.Query("status"))
 	}
-	if  g.Query("page_id") != ""{
-		filter = append(filter, `page_id like "%` + g.Query("page_id") + `%"`)
-	}
-	if  g.Query("slug") != ""{
-		filter = append(filter, `slug like "%` + g.Query("slug") + `%"`)
-	}
-	if  g.Query("lang") != ""{
-		filter = append(filter, `lang like "%` + g.Query("lang") + `%"`)
+	if  g.Query("name") != ""{
+		filter = append(filter, `name like "%` + g.Query("name") + `%"`)
 	}
 	return filter
 }
@@ -32,20 +26,20 @@ func filter(g *gin.Context) []string {
 * preload module with some preload conditions
 */
 func preload() []string {
-	return []string{}
+	return []string{"Translations"}
 }
 
 /**
 * here we will check if request valid or not
- */
-func validateRequest(g *gin.Context) (bool , *models.Translation)   {
+*/
+func validateRequest(g *gin.Context) (bool , *models.Page)   {
 	// init struct to validate request
-	row := new(models.Translation)
+	row := new(models.Page)
 	/**
 	* get request and parse it to validation
 	* if there any error will return with message
 	 */
-	err := translation.StoreUpdate(g.Request, row)
+	err := page.StoreUpdate(g.Request, row)
 	/***
 	* return response if there an error if true you
 	* this mean you have errors so we will return and bind data
@@ -59,9 +53,9 @@ func validateRequest(g *gin.Context) (bool , *models.Translation)   {
 /**
 * findOrFail Data
  */
-func findOrFail(g *gin.Context) (models.Translation , bool)  {
-	var oldRow models.Translation
-	config.DB.Find(&oldRow , "id = "+g.Param("id"))
+func findOrFail(g *gin.Context) (models.Page , bool)  {
+	var oldRow models.Page
+	config.DB.Preload("Translations").Find(&oldRow , "id = "+g.Param("id"))
 	if oldRow.ID != 0{
 		return   oldRow , true
 	}
@@ -72,8 +66,8 @@ func findOrFail(g *gin.Context) (models.Translation , bool)  {
 * update row make sure you used UpdateOnlyAllowColumns to update allow columns
 * use fill able method to only update what you need
 */
-func updateColumns(row *models.Translation , oldRow models.Translation) models.Translation {
-	onlyAllowData := helpers.UpdateOnlyAllowColumns(row , models.TranslationFillAbleColumn())
+func updateColumns(row *models.Page , oldRow models.Page) models.Page  {
+	onlyAllowData := helpers.UpdateOnlyAllowColumns(row , models.CategoryFillAbleColumn())
 	config.DB.Model(&oldRow).Updates(onlyAllowData).Find(&oldRow)
 	return oldRow
 }

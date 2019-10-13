@@ -51,15 +51,15 @@ func TestTranslationsUpdateCategoryWithValidData(t *testing.T) {
 	var oldRow models.Translation
 	config.DB.First(&oldRow)
 	data := models.Translation{
-		Page:  "homeEE",
-		Slug:  "home_page_title",
-		Value: "Homed",
-		Lang:  "ar",
+		PageId: 1,
+		Slug:   "home_page_title",
+		Value:  "Homed",
+		Lang:   "ar",
 	}
 	k := put(data, translationUrl+"/1", false, token)
 	responseData := responseData(k.Result().Body)
 	recoverResponse := gojsonq.New().JSONString(responseData)
-	assert.Equal(t, data.Page, recoverResponse.Find("data.page"))
+	assert.Equal(t, data.PageId, recoverResponse.Find("data.page"))
 	assert.Equal(t, 200, k.Code)
 }
 
@@ -78,21 +78,21 @@ func TestTranslationsRequireInputs(t *testing.T) {
 	}, translationUrl, false, token)
 	///not send slug
 	checkPutRequestWithHeadersDataIsValid(t, models.Translation{
-		Page:  helpers.RandomString(7),
-		Value: helpers.RandomString(5),
-		Lang:  helpers.RandomString(2),
+		PageId: 1,
+		Value:  helpers.RandomString(5),
+		Lang:   helpers.RandomString(2),
 	}, translationUrl, false, token)
 	///not send Value
 	checkPutRequestWithHeadersDataIsValid(t, models.Translation{
-		Page: helpers.RandomString(7),
-		Slug: helpers.RandomString(10),
-		Lang: helpers.RandomString(2),
+		PageId: 1,
+		Slug:   helpers.RandomString(10),
+		Lang:   helpers.RandomString(2),
 	}, translationUrl, false, token)
 	///not send Lang
 	checkPutRequestWithHeadersDataIsValid(t, models.Translation{
-		Page:  helpers.RandomString(7),
-		Slug:  helpers.RandomString(10),
-		Value: helpers.RandomString(5),
+		PageId: 1,
+		Slug:   helpers.RandomString(10),
+		Value:  helpers.RandomString(5),
 	}, translationUrl, false, token)
 }
 
@@ -106,69 +106,69 @@ func TestTranslationsInputsLimitation(t *testing.T) {
 	url := translationUrl + "/1"
 	///min Value fails
 	checkPutRequestWithHeadersDataIsValid(t, models.Translation{
-		Page:  helpers.RandomString(7),
-		Slug:  helpers.RandomString(10),
-		Value: helpers.RandomString(1),
-		Lang:  helpers.RandomString(2),
+		PageId: 1,
+		Slug:   helpers.RandomString(10),
+		Value:  helpers.RandomString(1),
+		Lang:   helpers.RandomString(2),
 	}, url, false, token)
 	///max Value fails
 	checkPutRequestWithHeadersDataIsValid(t, models.Translation{
-		Page:  helpers.RandomString(7),
-		Slug:  helpers.RandomString(10),
-		Value: helpers.RandomString(300),
-		Lang:  helpers.RandomString(2),
+		PageId: 1,
+		Slug:   helpers.RandomString(10),
+		Value:  helpers.RandomString(300),
+		Lang:   helpers.RandomString(2),
 	}, url, false, token)
-	///min Page fails
+	///min PageId fails
 	checkPutRequestWithHeadersDataIsValid(t, models.Translation{
-		Page:  helpers.RandomString(1),
-		Slug:  helpers.RandomString(10),
-		Value: helpers.RandomString(10),
-		Lang:  helpers.RandomString(2),
+		PageId: 1,
+		Slug:   helpers.RandomString(10),
+		Value:  helpers.RandomString(10),
+		Lang:   helpers.RandomString(2),
 	}, url, false, token)
-	///max Page fails
+	///max PageId fails
 	checkPutRequestWithHeadersDataIsValid(t, models.Translation{
-		Page:  helpers.RandomString(50),
-		Slug:  helpers.RandomString(10),
-		Value: helpers.RandomString(10),
-		Lang:  helpers.RandomString(2),
+		PageId: 1,
+		Slug:   helpers.RandomString(10),
+		Value:  helpers.RandomString(10),
+		Lang:   helpers.RandomString(2),
 	}, url, false, token)
 	///min Lang fails
 	checkPutRequestWithHeadersDataIsValid(t, models.Translation{
-		Page:  helpers.RandomString(4),
-		Slug:  helpers.RandomString(10),
-		Value: helpers.RandomString(10),
-		Lang:  helpers.RandomString(1),
+		PageId: 1,
+		Slug:   helpers.RandomString(10),
+		Value:  helpers.RandomString(10),
+		Lang:   helpers.RandomString(1),
 	}, url, false, token)
 	///max Lang fails
 	checkPutRequestWithHeadersDataIsValid(t, models.Translation{
-		Page:  helpers.RandomString(4),
-		Slug:  helpers.RandomString(10),
-		Value: helpers.RandomString(10),
-		Lang:  helpers.RandomString(20),
+		PageId: 1,
+		Slug:   helpers.RandomString(10),
+		Value:  helpers.RandomString(10),
+		Lang:   helpers.RandomString(20),
 	}, url, false, token)
 	///min Slug fails
 	checkPutRequestWithHeadersDataIsValid(t, models.Translation{
-		Page:  helpers.RandomString(4),
-		Slug:  helpers.RandomString(1),
-		Value: helpers.RandomString(10),
-		Lang:  helpers.RandomString(2),
+		PageId: 1,
+		Slug:   helpers.RandomString(1),
+		Value:  helpers.RandomString(10),
+		Lang:   helpers.RandomString(2),
 	}, url, false, token)
 	///max Slug fails
 	checkPutRequestWithHeadersDataIsValid(t, models.Translation{
-		Page:  helpers.RandomString(4),
-		Slug:  helpers.RandomString(60),
-		Value: helpers.RandomString(10),
-		Lang:  helpers.RandomString(2),
+		PageId: 1,
+		Slug:   helpers.RandomString(60),
+		Value:  helpers.RandomString(10),
+		Lang:   helpers.RandomString(2),
 	}, url, false, token)
 
 }
 
 func newTranslation() models.Translation {
 	data := models.Translation{
-		Page:  "home",
-		Slug:  "home_page_title",
-		Value: "Home",
-		Lang:  "ar",
+		PageId: 1,
+		Slug:   "home_page_title",
+		Value:  "Home",
+		Lang:   "ar",
 	}
 	config.DB.Create(&data)
 	return data

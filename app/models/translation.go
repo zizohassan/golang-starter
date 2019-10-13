@@ -9,13 +9,13 @@ import (
 * model struct here we will build the main
 * struct that connect to database
 * status 1 active 2 is not active
-*/
+ */
 type Translation struct {
 	gorm.Model
-	Value     string       `gorm:"type:varchar(255);" json:"value"`
-	Slug      string       `gorm:"type:varchar(50);" json:"slug"`
-	Lang      string       `gorm:"type:varchar(10);" json:"lang"`
-	Page      string       `gorm:"type:varchar(30);" json:"page"`
+	Value  string `gorm:"type:varchar(255);" json:"value"`
+	Slug   string `gorm:"type:varchar(50);" json:"slug"`
+	Lang   string `gorm:"type:varchar(10);" json:"lang"`
+	PageId int    `gorm:"type:varchar(30);" json:"page_id"`
 }
 
 /**
@@ -28,7 +28,7 @@ func (s *MigrationTables) TranslationMigrate() {
 
 /**
 * you can update these column only
-*/
+ */
 func TranslationFillAbleColumn() []string {
-	return []string{"value" , "slug" , "lang" , "page"}
+	return []string{"value", "slug", "lang", "page_id"}
 }

@@ -2,6 +2,7 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
+	"golang-starter/app/controllers/admin/Pages"
 	"golang-starter/app/controllers/admin/categories"
 	"golang-starter/app/controllers/admin/settings"
 	"golang-starter/app/controllers/admin/translations"
@@ -17,9 +18,7 @@ func Admin(r *gin.RouterGroup) *gin.RouterGroup {
 	translations.Routes(r)
 	settings.Routes(r)
 	users.Routes(r)
+	pages.Routes(r)
 
 	return r
 }
-
-
-

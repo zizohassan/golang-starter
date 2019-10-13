@@ -5,13 +5,13 @@ import "golang-starter/app/models"
 /**
 * stander the single user response
  */
-func SettingResponse(setting models.Setting) map[string]interface{} {
+func TranslationResponse(translation models.Translation) map[string]interface{} {
 	var u = make(map[string]interface{})
-	u["value"] = setting.Value
-	u["id"] = setting.ID
-	u["name"] = setting.Name
-	u["slug"] = setting.Slug
-	u["setting_type"] = setting.SettingType
+	u["value"] = translation.Value
+	u["id"] = translation.ID
+	u["slug"] = translation.Slug
+	u["lang"] = translation.Lang
+	u["page_id"] = translation.PageId
 
 	return u
 }
@@ -19,10 +19,11 @@ func SettingResponse(setting models.Setting) map[string]interface{} {
 /**
 * stander the Multi users response
  */
-func SettingsResponse(settings []models.Setting) []map[string]interface{} {
+func TranslationsResponse(translations []models.Translation) []map[string]interface{} {
 	var u = make([]map[string]interface{}, 0)
-	for _, setting := range settings {
-		u = append(u, SettingResponse(setting))
+	for _, translation := range translations {
+		u = append(u, TranslationResponse(translation))
 	}
+
 	return u
 }
