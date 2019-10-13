@@ -112,17 +112,17 @@ func TestAddUserNotValidInputs(t *testing.T) {
 
 
 func TestUpdateUsersWithValidWithOutPasswordData(t *testing.T) {
+	usersUrl = "admin/users"
 	token := getTokenAsHeader(true)
-	_ = newUser(t, false, token)
 	data := models.User{
 		Name:  "Abdel Aziz hassan Abdel Aziz",
 		Role:  2,
 		Block: 1,
 		Email: "zizo@gmail.com",
 	}
-	k := put(data, usersUrl+"/2", false, token)
+	k := put(data, usersUrl+"/1", false, token)
 	var row models.User
-	config.DB.Where("id = 2").Find(&row)
+	config.DB.Where("id = 1").Find(&row)
 	d := getDataMap(k)
 	assert.EqualValues(t, row.Name, d["name"])
 	assert.EqualValues(t, row.Role, d["role"])
@@ -132,10 +132,10 @@ func TestUpdateUsersWithValidWithOutPasswordData(t *testing.T) {
 }
 
 func TestUpdateUsersWithValidWithPasswordData(t *testing.T) {
+	usersUrl = "admin/users"
 	token := getTokenAsHeader(true)
-	_ = newUser(t, false, token)
 	var oldRow models.User
-	config.DB.Where("id = 2").Find(&oldRow)
+	config.DB.Find(&oldRow , "id = 1")
 	data := models.User{
 		Name:     "Abdel Aziz hassan Abdel Aziz",
 		Role:     2,
@@ -143,14 +143,14 @@ func TestUpdateUsersWithValidWithPasswordData(t *testing.T) {
 		Email:    "zizo@gmail.com",
 		Password: "1234567",
 	}
-	k := put(data, usersUrl+"/2", false, token)
+	k := put(data, usersUrl+"/1", false, token)
 	var row models.User
-	config.DB.Where("id = 2").Find(&row)
+	config.DB.Find(&row , "id = 1")
 	d := getDataMap(k)
-	assert.EqualValues(t, row.Name, d["name"])
-	assert.EqualValues(t, row.Role, d["role"])
-	assert.EqualValues(t, row.Block, d["block"])
-	assert.EqualValues(t, row.Email, d["email"])
+	assert.EqualValues(t, "Abdel Aziz hassan Abdel Aziz", d["name"])
+	assert.EqualValues(t, 2, d["role"])
+	assert.EqualValues(t,  1, d["block"])
+	assert.EqualValues(t, "zizo@gmail.com", d["email"])
 	assert.NotEqual(t, row.Password, oldRow.Password)
 	assert.Equal(t, 200, k.Code)
 }
@@ -159,6 +159,7 @@ func TestUpdateUsersWithValidWithPasswordData(t *testing.T) {
 * Test Required inputs
  */
 func TestUsersRequireInputs(t *testing.T) {
+	usersUrl = "admin/users"
 	token := getTokenAsHeader(true)
 	///not send name
 	checkPostRequestWithHeadersDataIsValid(t, models.User{
@@ -230,6 +231,7 @@ func TestUsersRequireInputs(t *testing.T) {
 * Test inputs limitaion
  */
 func TestUsersInputsLimitation(t *testing.T) {
+	usersUrl = "admin/users"
 	token := getTokenAsHeader(true)
 	///min send name
 	checkPostRequestWithHeadersDataIsValid(t, models.User{
