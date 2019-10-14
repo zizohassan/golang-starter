@@ -15,5 +15,9 @@
   "duplicate_data_part_two" : " already exists please try something else",
   "email" : "Email",
   "email_not_valid" : "this email not valid",
-  "upload_error_code" : " Error in upload file  "
+  "upload_error_code" : " Error in upload file  ",
+  "numeric" : "this input must be numeric",
+  "ext" : "file must be ",
+  "size"  : "upload file size must be less than ",
+  "upload_multi_images_error_code" : "please check files you upload"
 }

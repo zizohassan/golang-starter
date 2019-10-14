@@ -60,9 +60,7 @@ func Paging(p *Param, result interface{}) *Paginator {
 	}
 
 	if len(p.Preload) > 0 {
-		for _, pre := range p.Preload {
-			db = db.Preload(pre)
-		}
+		db = PreloadD(db , p.Preload)
 	}
 
 	done := make(chan bool, 1)

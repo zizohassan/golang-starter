@@ -59,9 +59,9 @@ func validateRequest(g *gin.Context) (bool , *models.Setting)   {
 /**
 * findOrFail Data
  */
-func findOrFail(g *gin.Context) (models.Setting , bool)  {
+func FindOrFail(id interface{}) (models.Setting , bool)  {
 	var oldRow models.Setting
-	config.DB.Find(&oldRow , "id = "+g.Param("id"))
+	config.DB.Where("id = ?" , id).Find(&oldRow)
 	if oldRow.ID != 0{
 		return   oldRow , true
 	}
@@ -74,6 +74,7 @@ func findOrFail(g *gin.Context) (models.Setting , bool)  {
 */
 func updateColumns(row *models.Setting , oldRow models.Setting) models.Setting {
 	onlyAllowData := helpers.UpdateOnlyAllowColumns(row , models.SettingFillAbleColumn())
-	config.DB.Model(&oldRow).Updates(onlyAllowData).Find(&oldRow)
-	return oldRow
+	config.DB.Model(&oldRow).Updates(onlyAllowData)
+	newData  , _ :=  FindOrFail(oldRow.ID)
+	return newData
 }

@@ -2,6 +2,7 @@ package translations
 
 import (
 	"github.com/gin-gonic/gin"
+	pages "golang-starter/app/controllers/admin/Pages"
 	"golang-starter/app/models"
 	"golang-starter/app/transformers"
 	"golang-starter/config"
@@ -35,7 +36,7 @@ func Index(g *gin.Context) {
  */
 func Show(g *gin.Context) {
 	// find this row or return 404
-	row, find := findOrFail(g)
+	row, find := FindOrFail(g.Param("id"))
 	if !find {
 		helpers.ReturnNotFound(g, helpers.ItemNotFound(g))
 		return
@@ -54,10 +55,17 @@ func Update(g *gin.Context) {
 		return
 	}
 	// find this row or return 404
-	oldRow, find := findOrFail(g)
+	oldRow, find := FindOrFail(g.Param("id"))
 	if !find {
 		helpers.ReturnNotFound(g, helpers.ItemNotFound(g))
 		return
+	}
+	// check if page exists
+	if row.PageId != 0 {
+		_, pageExits := pages.FindOrFail(row.PageId)
+		if !pageExits {
+			helpers.ReturnNotFound(g, helpers.ItemNotFound(g))
+		}
 	}
 	/// update allow columns
 	oldRow = updateColumns(row, oldRow)

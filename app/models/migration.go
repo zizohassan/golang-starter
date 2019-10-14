@@ -1,6 +1,7 @@
 package models
 
 import (
+	"github.com/iancoleman/strcase"
 	"github.com/jinzhu/inflection"
 	"os"
 	"reflect"
@@ -25,7 +26,7 @@ func MigrateAllTable(path string) {
 		filepath := strings.Split(file, ".")
 		fileName := filepath[0]
 		if fileName != "migration" {
-			functionName := strings.Title(filepath[0]) + "Migrate"
+			functionName := strcase.ToCamel(filepath[0]) + "Migrate"
 			deleteTables, _ := strconv.ParseBool(os.Getenv("DROP_ALL_TABLES"))
 			if deleteTables {
 				config.DB.DropTableIfExists(inflection.Plural(filepath[0]))

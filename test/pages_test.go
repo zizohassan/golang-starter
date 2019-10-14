@@ -63,11 +63,11 @@ func TestPagesRequireInputs(t *testing.T) {
 	token := getTokenAsHeader(true)
 	url := "admin/pages/1"
 	///not send name
-	checkPutRequestWithHeadersDataIsValid(t, models.Category{
+	checkPutRequestWithHeadersDataIsValid(t, models.Page{
 		Name: helpers.RandomString(10),
 	}, url, false, token)
 	///not send status
-	checkPutRequestWithHeadersDataIsValid(t, models.Category{
+	checkPutRequestWithHeadersDataIsValid(t, models.Page{
 		Status: 1,
 	}, url, false, token)
 }
@@ -81,22 +81,22 @@ func TestPagesInputsLimitation(t *testing.T) {
 	newPage()
 	url := "admin/pages/1"
 	///min name fails
-	checkPutRequestWithHeadersDataIsValid(t, models.Category{
-		Name:   helpers.RandomString(4),
+	checkPutRequestWithHeadersDataIsValid(t, models.Page{
+		Name:   helpers.RandomString(2),
 		Status: 1,
 	}, url, false, token)
 	///max name fails
-	checkPutRequestWithHeadersDataIsValid(t, models.Category{
+	checkPutRequestWithHeadersDataIsValid(t, models.Page{
 		Name:   helpers.RandomString(80),
 		Status: 1,
 	}, url, false, token)
 	///max status fails
-	checkPutRequestWithHeadersDataIsValid(t, models.Category{
+	checkPutRequestWithHeadersDataIsValid(t, models.Page{
 		Name:   helpers.RandomString(10),
 		Status: 3,
 	}, url, false, token)
 	///min status fails
-	checkPutRequestWithHeadersDataIsValid(t, models.Category{
+	checkPutRequestWithHeadersDataIsValid(t, models.Page{
 		Name:   helpers.RandomString(10),
 		Status: 0,
 	}, url, false, token)

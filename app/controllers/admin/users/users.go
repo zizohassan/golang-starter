@@ -57,7 +57,7 @@ func Store(g *gin.Context) {
  */
 func Show(g *gin.Context) {
 	// find this row or return 404
-	row, find := findOrFail(g)
+	row, find := FindOrFail(g.Param("id"))
 	if !find {
 		helpers.ReturnNotFound(g, helpers.ItemNotFound(g))
 		return
@@ -71,7 +71,7 @@ func Show(g *gin.Context) {
  */
 func Delete(g *gin.Context) {
 	// find this row or return 404
-	row, find := findOrFail(g)
+	row, find := FindOrFail(g.Param("id"))
 	if !find {
 		helpers.ReturnNotFound(g, helpers.ItemNotFound(g))
 		return
@@ -91,7 +91,7 @@ func Update(g *gin.Context) {
 		return
 	}
 	// find this row or return 404
-	oldRow, find := findOrFail(g)
+	oldRow, find := FindOrFail(g.Param("id"))
 	if !find {
 		helpers.ReturnNotFound(g, helpers.ItemNotFound(g))
 		return

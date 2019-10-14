@@ -1,6 +1,7 @@
 package translations
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"golang-starter/app/models"
 	"golang-starter/app/requests/admin/translation"
@@ -59,9 +60,9 @@ func validateRequest(g *gin.Context) (bool , *models.Translation)   {
 /**
 * findOrFail Data
  */
-func findOrFail(g *gin.Context) (models.Translation , bool)  {
+func FindOrFail(id interface{}) (models.Translation , bool)  {
 	var oldRow models.Translation
-	config.DB.Find(&oldRow , "id = "+g.Param("id"))
+	config.DB.Where("id = ?" , id).Find(&oldRow)
 	if oldRow.ID != 0{
 		return   oldRow , true
 	}
@@ -74,6 +75,8 @@ func findOrFail(g *gin.Context) (models.Translation , bool)  {
 */
 func updateColumns(row *models.Translation , oldRow models.Translation) models.Translation {
 	onlyAllowData := helpers.UpdateOnlyAllowColumns(row , models.TranslationFillAbleColumn())
-	config.DB.Model(&oldRow).Updates(onlyAllowData).Find(&oldRow)
-	return oldRow
+	fmt.Println("old row"  , onlyAllowData, oldRow)
+	config.DB.Model(&oldRow).Updates(onlyAllowData)
+	newData  , _ :=  FindOrFail(oldRow.ID)
+	return newData
 }

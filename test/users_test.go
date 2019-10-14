@@ -9,16 +9,17 @@ import (
 	"testing"
 )
 
-var usersUrl = "admin/users"
 
 ///// show all case
 func TestUsersShowAll(t *testing.T) {
+	usersUrl := "admin/users"
 	k := get(usersUrl, false, getTokenAsHeader(true))
 	assert.Equal(t, 0.0, returnResponseKey(k, "data.offset"))
 	assert.Equal(t, 200, k.Code)
 }
 
 func TestUsersFilter(t *testing.T) {
+	usersUrl := "admin/users"
 	token := getTokenAsHeader(true)
 	w := newUser(t, false, token)
 	assert.Equal(t, 200, w.Code)
@@ -31,6 +32,7 @@ func TestUsersFilter(t *testing.T) {
 
 ///// show function cases
 func TestUsersShowWithValidId(t *testing.T) {
+	usersUrl := "admin/users"
 	token := getTokenAsHeader(true)
 	w := newUser(t, false, token)
 	assert.Equal(t, 200, w.Code)
@@ -40,6 +42,7 @@ func TestUsersShowWithValidId(t *testing.T) {
 }
 
 func TestUsersShowWithNotValidId(t *testing.T) {
+	usersUrl := "admin/users"
 	token := getTokenAsHeader(true)
 	k := get(usersUrl+"/1000", false, token)
 	assert.Equal(t, 404, k.Code)
@@ -47,18 +50,21 @@ func TestUsersShowWithNotValidId(t *testing.T) {
 
 ///// delete case
 func TestUsersDeleteWithValidId(t *testing.T) {
+	usersUrl := "admin/users"
 	token := getTokenAsHeader(true)
 	k := deleter(usersUrl+"/1", false, token)
 	assert.Equal(t, 200, k.Code)
 }
 
 func TestUsersDeleteWithNotValidId(t *testing.T) {
+	usersUrl := "admin/users"
 	token := getTokenAsHeader(true)
 	k := deleter(usersUrl+"/1000", false, token)
 	assert.Equal(t, 404, k.Code)
 }
 
 func TestUsersDeleteWithWrongRoute(t *testing.T) {
+	usersUrl := "admin/users"
 	token := getTokenAsHeader(true)
 	k := deleter(usersUrl, false, token)
 	assert.Equal(t, 404, k.Code)
@@ -76,12 +82,14 @@ func TestStoreUsersWithValidData(t *testing.T) {
 * check if user has register with email before
  */
 func TestAddUserWithExistEmail(t *testing.T)  {
+	usersUrl := "admin/users"
 	token := getTokenAsHeader(true)
 	k := post(existsEmailData() , usersUrl , false , token)
 	assert.Equal(t, 409, k.Code)
 }
 
 func TestUpdateUserWithExistEmail(t *testing.T)  {
+	usersUrl := "admin/users"
 	token := getTokenAsHeader(true)
 	k := post(existsEmailData() , usersUrl , false , token)
 	assert.Equal(t, 409, k.Code)
@@ -91,6 +99,7 @@ func TestUpdateUserWithExistEmail(t *testing.T)  {
 * Test not valid inputs
  */
 func TestAddUserNotValidInputs(t *testing.T) {
+	usersUrl := "admin/users"
 	token := getTokenAsHeader(true)
 	///not valid email
 	checkPostRequestWithHeadersDataIsValid(t, models.User{
@@ -112,7 +121,7 @@ func TestAddUserNotValidInputs(t *testing.T) {
 
 
 func TestUpdateUsersWithValidWithOutPasswordData(t *testing.T) {
-	usersUrl = "admin/users"
+	usersUrl := "admin/users"
 	token := getTokenAsHeader(true)
 	data := models.User{
 		Name:  "Abdel Aziz hassan Abdel Aziz",
@@ -132,7 +141,7 @@ func TestUpdateUsersWithValidWithOutPasswordData(t *testing.T) {
 }
 
 func TestUpdateUsersWithValidWithPasswordData(t *testing.T) {
-	usersUrl = "admin/users"
+	usersUrl := "admin/users"
 	token := getTokenAsHeader(true)
 	var oldRow models.User
 	config.DB.Find(&oldRow , "id = 1")
@@ -159,7 +168,7 @@ func TestUpdateUsersWithValidWithPasswordData(t *testing.T) {
 * Test Required inputs
  */
 func TestUsersRequireInputs(t *testing.T) {
-	usersUrl = "admin/users"
+	usersUrl := "admin/users"
 	token := getTokenAsHeader(true)
 	///not send name
 	checkPostRequestWithHeadersDataIsValid(t, models.User{
@@ -231,7 +240,7 @@ func TestUsersRequireInputs(t *testing.T) {
 * Test inputs limitaion
  */
 func TestUsersInputsLimitation(t *testing.T) {
-	usersUrl = "admin/users"
+	usersUrl := "admin/users"
 	token := getTokenAsHeader(true)
 	///min send name
 	checkPostRequestWithHeadersDataIsValid(t, models.User{
@@ -398,6 +407,7 @@ func TestUsersInputsLimitation(t *testing.T) {
 }
 
 func newUser(t *testing.T, migrate bool, token map[string]string) *httptest.ResponseRecorder {
+	usersUrl := "admin/users"
 	data := models.User{
 		Name:     "Abdel Aziz",
 		Role:     1,

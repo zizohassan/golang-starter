@@ -12,9 +12,12 @@ import (
  */
 type Page struct {
 	gorm.Model
-	Name         string         `gorm:"type:varchar(50);" json:"name"`
-	Status       int            `gorm:"type:tinyint(1);" json:"status"`
-	Translations []Translation `json:"translations"`
+	Name         string              `gorm:"type:varchar(50);" json:"name"`
+	Status       int                 `gorm:"type:tinyint(1);" json:"status"`
+	Image        []string            `gorm:"-" json:"image"`
+	Translation  []map[string]string `gorm:"-" json:"translation"`
+	Translations []Translation       `json:"translations"`
+	Images       []PageImage         `json:"images"`
 }
 
 /**

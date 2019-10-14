@@ -14,6 +14,26 @@ func Min(lang string, number string) string {
 	return "min:" + gotrans.Tr(lang, "min") + " " + number
 }
 
+func Ext(lang string, extentions string) string {
+	return "ext:" + gotrans.Tr(lang, "ext") + " " + extentions
+}
+
+func Mime(lang string, extentions string) string {
+	return "mime:" + gotrans.Tr(lang, "ext") + " " + extentions
+}
+
+func Size(lang string, size string) string {
+	return "size:" + gotrans.Tr(lang, "size") + " " + size
+}
+
+func Numeric(lang string) string {
+	return "numeric:" + gotrans.Tr(lang, "numeric")
+}
+
+func Digits(lang string) string {
+	return "digits:" + gotrans.Tr(lang, "numeric")
+}
+
 func Max(lang string, number string) string {
 	return "max:" + gotrans.Tr(lang, "max") + " " + number
 }

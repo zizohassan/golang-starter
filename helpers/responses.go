@@ -42,10 +42,39 @@ func UploadError(g *gin.Context) {
 }
 
 /**
+* multi upload error
+ */
+func MultiUploadError(g *gin.Context) {
+	var errors map[string]string
+	var data map[string]interface{}
+	var msg = T(g, "upload_multi_images_error_code")
+	response(g, msg, data, errors, 415, 415, false)
+	return
+}
+
+/**
 * NotValidRequest response
  */
 func ReturnNotValidRequest(error *govalidator.Validator, g *gin.Context) bool {
 	e := error.ValidateJSON()
+	if len(e) > 0 {
+		g.JSON(
+			http.StatusBadRequest, gin.H{
+				"status":  false,
+				"message": gotrans.Tr(GetCurrentLang(g), "400"),
+				"errors":  e,
+				"code":    400,
+			})
+		return true
+	}
+	return false
+}
+
+/**
+* NotValidRequest response
+ */
+func ReturnNotValidRequestFormData(error *govalidator.Validator, g *gin.Context) bool {
+	e := error.Validate()
 	if len(e) > 0 {
 		g.JSON(
 			http.StatusBadRequest, gin.H{

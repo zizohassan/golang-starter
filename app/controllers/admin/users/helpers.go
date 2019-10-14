@@ -65,9 +65,9 @@ func validateRequest(g *gin.Context, action string) (bool, *models.User) {
 /**
 * findOrFail Data
  */
-func findOrFail(g *gin.Context) (models.User, bool) {
+func FindOrFail(id interface{}) (models.User, bool) {
 	var oldRow models.User
-	config.DB.Find(&oldRow, "id = "+g.Param("id"))
+	config.DB.Where("id = ?" , id).Find(&oldRow)
 	if oldRow.ID != 0 {
 		return oldRow, true
 	}
@@ -84,6 +84,7 @@ func updateColumns(row *models.User, oldRow models.User) models.User {
 		row.Password = password
 	}
 	onlyAllowData := helpers.UpdateOnlyAllowColumns(row, models.UserFillAbleColumn())
-	config.DB.Model(&oldRow).Updates(onlyAllowData).Find(&oldRow)
-	return oldRow
+	config.DB.Model(&oldRow).Updates(onlyAllowData)
+	newData  , _ :=  FindOrFail(oldRow.ID)
+	return newData
 }
