@@ -70,6 +70,20 @@ func FindOrFail(id interface{}) (models.Page, bool) {
 }
 
 /**
+* findOrFail Image
+ */
+func FindOrFailImage(id interface{}) (models.PageImage, bool) {
+	var oldRow models.PageImage
+	db := config.DB.Where("id = ? ", id)
+	db.Find(&oldRow)
+	if oldRow.ID != 0 {
+		return oldRow, true
+	}
+	return oldRow, false
+}
+
+
+/**
 * update row make sure you used UpdateOnlyAllowColumns to update allow columns
 * use fill able method to only update what you need
  */

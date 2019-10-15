@@ -70,7 +70,7 @@ func Delete(g *gin.Context) {
 		return
 	}
 	config.DB.Unscoped().Delete(&row)
-	// now return row data after transformers
+	// now return ok response
 	helpers.OkResponseWithOutData(g, helpers.DoneDelete(g))
 }
 

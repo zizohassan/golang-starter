@@ -10,6 +10,8 @@ func Routes(r *gin.RouterGroup) *gin.RouterGroup {
 	r.PUT("pages/:id", Update)
 	r.GET("pages/:id", Show)
 	r.POST("pages/image/:id", UploadImage)
+	r.DELETE("pages/image/:id", DeleteImage)
+	r.DELETE("pages/images/:id", DeletePageImages)
 
 	return r
 }

@@ -50,6 +50,7 @@ func TestPagesUpdateWithValidData(t *testing.T) {
 	data := models.Page{
 		Name:   "New Data",
 		Status: 1,
+		Image:images(5),
 	}
 	k := put(data, "admin/pages/1", false, token)
 	assert.Equal(t, data.Name, returnResponseKey(k, "data.name"))

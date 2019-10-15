@@ -2,6 +2,7 @@
 APP_ENV=local
 APP_PORT_LOCAL=9090
 APP_PORT_PRODUCTION=80
+APP_NAME=GOlang-Starter
 
 # urls
 FRONT_END_URL=http://www.website.com/
@@ -24,7 +25,7 @@ AUTH_SLUG=auth
 VISTORS_SLUG=/
 
 #path for test and production
-PRODUCTION_MODEL_PATH=models
+PRODUCTION_MODEL_PATH=app/models
 TEST_MODEL_PATH=../app/models
 
 #stmp email
@@ -38,3 +39,11 @@ LIMIT=30
 
 # language
 DEFAULT_LANG=en
+
+# default image quality
+QUALITY=100
+
+#upload image path
+UPLOAD_PATH=../public/images/
+UPLOAD_PATH_TEST=public/images/
+

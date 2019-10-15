@@ -124,6 +124,7 @@ func MultiDecodeImage(g *gin.Context, images []string) []string {
 	var uploadedImages []string
 	for _, imageToUpload := range images {
 		valid, imageName := DecodeImage(g, imageToUpload)
+		fmt.Println(valid, imageName)
 		if valid {
 			uploadedImages = append(uploadedImages, imageName)
 		}
@@ -167,9 +168,10 @@ func DecodeImage(g *gin.Context, filename string) (bool, string) {
 	name := guid.String() + ext
 	/// save image
 	path := "public/images/original/"
+	fmt.Println("FIle : " + path + name)
 	f, err := os.OpenFile(path+name, os.O_WRONLY|os.O_CREATE, 0777)
 	if err != nil {
-		return false, "image_error_save " + err.Error()
+		return false, "error_creating_file " + err.Error()
 	}
 	/// write image content based on extentions
 	if strings.Contains(data[1], "png") {
