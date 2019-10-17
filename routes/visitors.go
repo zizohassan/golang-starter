@@ -2,7 +2,9 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
-	"golang-starter/app/controllers/visitor"
+	"golang-starter/app/controllers/visitor/auth"
+	"golang-starter/app/controllers/visitor/general"
+	"golang-starter/app/controllers/visitor/pages"
 )
 
 /***
@@ -10,12 +12,9 @@ import (
 * anyone will have access this routes
  */
 func Visitor(r *gin.RouterGroup) *gin.RouterGroup {
-	/// start not auth routes
-	r.POST("login" , visitor.Login)
-	r.POST("register" , visitor.Register)
-	r.POST("reset" , visitor.Reset)
-	r.POST("recover" , visitor.Recover)
-
+	general.Routes(r)
+	auth.Routes(r)
+	pages.Routes(r)
 	/// serve static files like images
 	r.Static("/public" , "./public")
 

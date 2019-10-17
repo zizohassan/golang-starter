@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"golang-starter/app/controllers/admin/Pages"
 	"golang-starter/app/controllers/admin/categories"
+	"golang-starter/app/controllers/admin/faqs"
 	"golang-starter/app/controllers/admin/settings"
 	"golang-starter/app/controllers/admin/translations"
 	"golang-starter/app/controllers/admin/users"
@@ -19,6 +20,7 @@ func Admin(r *gin.RouterGroup) *gin.RouterGroup {
 	settings.Routes(r)
 	users.Routes(r)
 	pages.Routes(r)
+	faqs.Routes(r)
 
 	return r
 }

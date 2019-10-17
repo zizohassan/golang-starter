@@ -7,7 +7,6 @@ import (
 	"net/http"
 )
 
-
 /**
 * conflict
  */
@@ -64,6 +63,7 @@ func ReturnNotValidRequest(error *govalidator.Validator, g *gin.Context) bool {
 				"message": gotrans.Tr(GetCurrentLang(g), "400"),
 				"errors":  e,
 				"code":    400,
+				"payload": nil,
 			})
 		return true
 	}
@@ -82,6 +82,7 @@ func ReturnNotValidRequestFormData(error *govalidator.Validator, g *gin.Context)
 				"message": gotrans.Tr(GetCurrentLang(g), "400"),
 				"errors":  e,
 				"code":    400,
+				"payload": nil,
 			})
 		return true
 	}
@@ -111,7 +112,7 @@ func ReturnForbidden(g *gin.Context, msg string) {
 /**
 * ok response with data
  */
-func OkResponse(g *gin.Context, msg string, data map[string]interface{}) {
+func OkResponse(g *gin.Context, msg string, data interface{}) {
 	var errors map[string]string
 	response(g, msg, data, errors, http.StatusOK, 200, true)
 	return
@@ -156,7 +157,7 @@ func response(g *gin.Context, msg string, data interface{}, errors map[string]st
 		"message": msg,
 		"errors":  errors,
 		"code":    code,
-		"data":    data,
+		"payload": data,
 	})
 	return
 }

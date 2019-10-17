@@ -14,8 +14,8 @@ func StoreUpdate(r *http.Request, request *models.Page) *govalidator.Validator {
 	lang := helpers.GetCurrentLangFromHttp(r)
 	/// Validation rules
 	rules := govalidator.MapData{
-		"name":        []string{"required", "min:4", "max:50"},
-		"status":      []string{"required", "between:1,2"},
+		"name":   []string{"required", "min:4", "max:50"},
+		"status": []string{"required", "between:1,2"},
 	}
 
 	messages := govalidator.MapData{

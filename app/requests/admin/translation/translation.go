@@ -8,7 +8,7 @@ import (
 )
 
 /**
-* validate store category request
+* validate store translation request
  */
 func StoreUpdate(r *http.Request, request *models.Translation) *govalidator.Validator {
 	lang := helpers.GetCurrentLangFromHttp(r)

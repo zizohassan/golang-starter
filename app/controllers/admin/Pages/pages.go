@@ -36,7 +36,7 @@ func Index(g *gin.Context) {
  */
 func Show(g *gin.Context) {
 	// find this row or return 404
-	row, find := FindOrFail(g.Param("id"))
+	row, find := FindOrFailWithPreload(g.Param("id"), helpers.LangHeader(g))
 	if !find {
 		helpers.ReturnNotFound(g, helpers.ItemNotFound(g))
 		return
@@ -49,6 +49,8 @@ func Show(g *gin.Context) {
 * update page
  */
 func Update(g *gin.Context) {
+	// get language
+	lang := helpers.LangHeader(g)
 	// check if request valid
 	valid, row := validateRequest(g)
 	if !valid {
@@ -61,16 +63,15 @@ func Update(g *gin.Context) {
 		return
 	}
 	/// delete all images if reset flag in the url
-	if g.Query("reset") != "" {
-		deleteAllPageImage(g)
-		return
+	if g.Query("reset") == "true" {
+		deleteAllPageImage(oldRow.ID)
 	}
 	/// upload images
 	insertImageInDataBase(g, row.Image, int(oldRow.ID))
 	/// insert translations
 	insertTranslationsInDataBase(row.Translation, int(oldRow.ID))
 	/// update allow columns
-	oldRow = updateColumns(row, oldRow)
+	oldRow = updateColumns(row, oldRow, lang)
 	// now return row data after transformers
 	helpers.OkResponse(g, helpers.DoneUpdate(g), transformers.PageResponse(oldRow))
 }

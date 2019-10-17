@@ -6,6 +6,14 @@ func Required(lang string) string {
 	return "required:" + gotrans.Tr(lang, "required")
 }
 
+func StringsSlice(lang string) string {
+	return "strings_slice:" + gotrans.Tr(lang, "strings_slice")
+}
+
+func IntSlice(lang string) string {
+	return "int_slice:" + gotrans.Tr(lang, "strings_slice")
+}
+
 func Email(lang string) string {
 	return "email:" + gotrans.Tr(lang, "email_not_valid")
 }

@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/bykovme/gotrans"
 	"golang-starter/app/models"
+	"golang-starter/app/requests"
 	"golang-starter/config"
 	"golang-starter/providers"
 	"golang-starter/seeders"
@@ -17,6 +18,11 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	/**
+	* add custom role to validation
+	*
+	*/
+	requests.Init()
 	/**
 	* connect with data base logic you can edit .env file to
 	* change any connection params

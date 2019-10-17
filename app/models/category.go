@@ -30,3 +30,10 @@ func (s *MigrationTables) CategoryMigrate() {
 func CategoryFillAbleColumn() []string {
 	return []string{"name" , "status"}
 }
+
+/**
+* active category only
+ */
+func ActiveCategory(db *gorm.DB) *gorm.DB {
+	return db.Where("status = 2")
+}

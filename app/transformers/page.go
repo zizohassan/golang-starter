@@ -3,7 +3,7 @@ package transformers
 import "golang-starter/app/models"
 
 /**
-* stander the single user response
+* stander the single page response
  */
 func PageResponse(page models.Page) map[string]interface{} {
 	var u = make(map[string]interface{})
@@ -17,7 +17,7 @@ func PageResponse(page models.Page) map[string]interface{} {
 }
 
 /**
-* stander the Multi users response
+* stander the Multi pages response
  */
 func PagesResponse(pages []models.Page) []map[string]interface{} {
 	var u = make([]map[string]interface{}, 0)

@@ -24,4 +24,3 @@ func CategoriesResponse(categories []models.Category) []map[string]interface{} {
 	}
 	return u
 }
-

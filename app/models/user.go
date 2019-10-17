@@ -71,3 +71,11 @@ func (s *MigrationTables) UserMigrate() {
 func UserFillAbleColumn() []string {
 	return []string{"name", "email", "role", "password", "block"}
 }
+
+
+/**
+* active category only
+ */
+func ActiveUser(db *gorm.DB) *gorm.DB {
+	return db.Where("status = 2")
+}

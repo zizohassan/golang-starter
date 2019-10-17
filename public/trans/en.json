@@ -19,5 +19,7 @@
   "numeric" : "this input must be numeric",
   "ext" : "file must be ",
   "size"  : "upload file size must be less than ",
-  "upload_multi_images_error_code" : "please check files you upload"
+  "upload_multi_images_error_code" : "please check files you upload",
+  "init_project" : "Welcome in our services ",
+  "strings_slice"  : "this input is required"
 }

@@ -33,7 +33,6 @@ func preload() []string {
 * preload function when findOrFail
  */
 
-
 /**
 * here we will check if request valid or not
  */
@@ -60,8 +59,20 @@ func validateRequest(g *gin.Context) (bool, *models.Page) {
  */
 func FindOrFail(id interface{}) (models.Page, bool) {
 	var oldRow models.Page
+	config.DB.Where("id = ? ", id).Find(&oldRow)
+	if oldRow.ID != 0 {
+		return oldRow, true
+	}
+	return oldRow, false
+}
+
+func FindOrFailWithPreload(id interface{}, lang string) (models.Page, bool) {
+	var oldRow models.Page
 	db := config.DB.Where("id = ? ", id)
-	db = helpers.PreloadD(db  , []string{"Translations", "Images"})
+	// if user change language will get the new language keys
+	db = db.Preload("Translations", "lang = ?", lang)
+	// preload
+	db = helpers.PreloadD(db, []string{"Images"})
 	db.Find(&oldRow)
 	if oldRow.ID != 0 {
 		return oldRow, true
@@ -82,14 +93,13 @@ func FindOrFailImage(id interface{}) (models.PageImage, bool) {
 	return oldRow, false
 }
 
-
 /**
 * update row make sure you used UpdateOnlyAllowColumns to update allow columns
 * use fill able method to only update what you need
  */
-func updateColumns(row *models.Page, oldRow models.Page) models.Page {
+func updateColumns(row *models.Page, oldRow models.Page, lang string) models.Page {
 	onlyAllowData := helpers.UpdateOnlyAllowColumns(row, models.PageFillAbleColumn())
 	config.DB.Model(&oldRow).Updates(onlyAllowData)
-	newData  , _ :=  FindOrFail(oldRow.ID)
+	newData, _ := FindOrFailWithPreload(oldRow.ID, lang)
 	return newData
 }

@@ -40,7 +40,7 @@ func UploadImage(g *gin.Context) {
 	/// upload images and insert in database
 	insertImageInDataBase(g, row.Images, id)
 	/// get the new data with images
-	newPage, _ := FindOrFail(id)
+	newPage, _ := FindOrFailWithPreload(id, helpers.LangHeader(g))
 	helpers.OkResponse(g, helpers.DoneUpdate(g), transformers.PageResponse(newPage))
 }
 
@@ -64,24 +64,24 @@ func DeleteImage(g *gin.Context) {
 * Delete images assign to page by page id
  */
 func DeletePageImages(g *gin.Context) {
-	deleteAllPageImage(g)
-	return
-}
-
-/***
-*  get all page image and delete
- */
-func deleteAllPageImage(g *gin.Context) {
 	// find this row or return 404
 	row, find := FindOrFail(g.Param("id"))
 	if !find {
 		helpers.ReturnNotFound(g, helpers.ItemNotFound(g))
 		return
 	}
-	var rows models.PageImage
-	config.DB.Unscoped().Where("page_id = ? ", row.ID).Delete(&rows)
+	deleteAllPageImage(row.ID)
 	// now return ok response
 	helpers.OkResponseWithOutData(g, helpers.DoneDelete(g))
+	return
+}
+
+/***
+*  get all page image and delete
+ */
+func deleteAllPageImage(id uint) {
+	var rows models.PageImage
+	config.DB.Unscoped().Where("page_id = ? ", id).Delete(&rows)
 }
 
 /**

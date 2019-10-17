@@ -16,8 +16,8 @@ type Page struct {
 	Status       int                 `gorm:"type:tinyint(1);" json:"status"`
 	Image        []string            `gorm:"-" json:"image"`
 	Translation  []map[string]string `gorm:"-" json:"translation"`
-	Translations []Translation       `json:"translations"`
-	Images       []PageImage         `json:"images"`
+	Translations []Translation       `gorm:"association_autoupdate:false;association_autocreate:false" json:"translations"`
+	Images       []PageImage         `gorm:"association_autoupdate:false;association_autocreate:false" json:"images"`
 }
 
 /**
@@ -33,4 +33,12 @@ func (s *MigrationTables) PageMigrate() {
  */
 func PageFillAbleColumn() []string {
 	return []string{"name", "status"}
+}
+
+
+/**
+* active Page only
+ */
+func ActivePage(db *gorm.DB) *gorm.DB {
+	return db.Where("status = 2")
 }

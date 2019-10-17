@@ -3,7 +3,7 @@ package transformers
 import "golang-starter/app/models"
 
 /**
-* stander the single user response
+* stander the single setting response
  */
 func SettingResponse(translation models.Setting) map[string]interface{} {
 	var u = make(map[string]interface{})
@@ -17,7 +17,7 @@ func SettingResponse(translation models.Setting) map[string]interface{} {
 }
 
 /**
-* stander the Multi users response
+* stander the Multi settings response
  */
 func SettingsResponse(translations []models.Setting) []map[string]interface{} {
 	var u  = make([]map[string]interface{} , 0)

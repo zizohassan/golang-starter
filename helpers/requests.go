@@ -2,6 +2,7 @@ package helpers
 
 import (
 	"encoding/json"
+	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
@@ -15,4 +16,13 @@ func DecodeAndReturn(req  *http.Request, structBind interface{}) (interface{} , 
 		return structBind  , err
 	}
 	return structBind , nil
+}
+
+/**
+* get lang header
+*/
+func LangHeader(g *gin.Context) string  {
+	 s := ""
+	 s = g.Request.Header.Get("Accept-Language")
+	return s
 }
