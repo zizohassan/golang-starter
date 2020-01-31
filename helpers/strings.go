@@ -15,8 +15,7 @@ func ToSnakeCase(str string) string {
 
 /***
 *  trim text
-*/
+ */
 func ClearText(text string) string {
-	return strings.Trim(text , " ")
+	return strings.Trim(text, " ")
 }
-

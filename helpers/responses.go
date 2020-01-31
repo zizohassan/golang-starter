@@ -69,6 +69,25 @@ func ReturnNotValidRequest(error *govalidator.Validator, g *gin.Context) bool {
 	}
 	return false
 }
+/**
+* NotValidFile response
+ */
+func ReturnNotValidRequestFile(error *govalidator.Validator, g *gin.Context) bool {
+	e := error.Validate()
+	if len(e) > 0 {
+		g.JSON(
+			http.StatusBadRequest, gin.H{
+				"status":  false,
+				"message": gotrans.Tr(GetCurrentLang(g), "400"),
+				"errors":  e,
+				"code":    400,
+				"payload": nil,
+			})
+		return true
+	}
+	return false
+}
+
 
 /**
 * NotValidRequest response
@@ -159,5 +178,30 @@ func response(g *gin.Context, msg string, data interface{}, errors map[string]st
 		"code":    code,
 		"payload": data,
 	})
+	return
+}
+
+/**
+* NotValidRequest file
+ */
+func ReturnNotValidFile(err error, g *gin.Context) {
+	g.JSON(
+		http.StatusBadRequest, gin.H{
+			"status":  false,
+			"message": gotrans.Tr(GetCurrentLang(g), "400"),
+			"errors":  err,
+			"code":    400,
+			"payload": nil,
+		})
+}
+
+/**
+*  global response
+ */
+func ReturnResponseWithMessageAndStatus(g *gin.Context, statusHttp int, message string, status bool) {
+	var errors map[string]string
+	var data map[string]interface{}
+	var msg = gotrans.Tr(GetCurrentLang(g), message)
+	response(g, msg, data, errors, statusHttp, statusHttp, status)
 	return
 }

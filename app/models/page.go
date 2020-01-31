@@ -24,7 +24,7 @@ type Page struct {
 * migration function must be the file name concat with Migrate
 * key word Example : user will be UserMigrate
  */
-func (s *MigrationTables) PageMigrate() {
+func  PageMigrate() {
 	config.DB.AutoMigrate(&Page{})
 }
 

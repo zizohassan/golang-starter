@@ -22,7 +22,7 @@ type Faq struct {
 * migration function must be the file name concat with Migrate
 * key word Example : user will be UserMigrate
  */
-func (s *MigrationTables) FaqMigrate() {
+func  FaqMigrate() {
 	config.DB.AutoMigrate(&Faq{})
 }
 

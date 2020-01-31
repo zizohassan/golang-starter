@@ -7,7 +7,7 @@ import "github.com/gin-gonic/gin"
  */
 func Routes(r *gin.RouterGroup) *gin.RouterGroup {
 	/// init project
-	r.GET("pages/faqs", Faqs)
+	r.GET("page/faqs", Faqs)
 
 	return r
 }

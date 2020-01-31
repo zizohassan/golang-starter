@@ -8,7 +8,7 @@ import (
 
 /**
 * hash passwords
-*/
+ */
 func HashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 3)
 	return string(bytes), err
@@ -24,13 +24,12 @@ func CheckPasswordHash(password, hash string) bool {
 
 /**
 * generate token based on user data
-*/
+ */
 func GenerateToken(stringToHash string) (string, error) {
 	rand.Seed(time.Now().UnixNano())
 	token, _ := HashPassword(stringToHash + RandomString(10))
 	return token, nil
 }
-
 
 /**
 * generate random string

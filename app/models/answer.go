@@ -19,7 +19,7 @@ type Answer struct {
 * migration function must be the file name concat with Migrate
 * key word Example : user will be UserMigrate
  */
-func (s *MigrationTables) AnswerMigrate() {
+func AnswerMigrate() {
 	config.DB.AutoMigrate(&Answer{})
 }
 

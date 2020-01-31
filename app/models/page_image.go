@@ -27,7 +27,7 @@ type PageImageRequest struct {
 * migration function must be the file name concat with Migrate
 * key word Example : user will be UserMigrate
  */
-func (s *MigrationTables) PageImageMigrate() {
+func PageImageMigrate() {
 	config.DB.AutoMigrate(&PageImage{})
 }
 
