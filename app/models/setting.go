@@ -22,7 +22,7 @@ type Setting struct {
 * migration function must be the file name concat with Migrate
 * key word Example : user will be UserMigrate
  */
-func (s *MigrationTables) SettingMigrate() {
+func  SettingMigrate() {
 	config.DB.AutoMigrate(&Setting{})
 }
 

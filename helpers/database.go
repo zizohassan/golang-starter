@@ -1,10 +1,11 @@
 package helpers
 
 import (
+	"fmt"
 	"github.com/fatih/structs"
 	"github.com/iancoleman/strcase"
 	"github.com/jinzhu/gorm"
-	"golang-starter/config"
+	"new_back_end/config"
 	"strings"
 )
 
@@ -13,7 +14,7 @@ import (
  */
 func DbTruncate(tableName ...string) {
 	for _, table := range tableName {
-		config.DB.Exec("TRUNCATE " + table)
+		config.DB_WRITE.Exec("TRUNCATE " + table)
 	}
 }
 
@@ -24,6 +25,7 @@ func DbTruncate(tableName ...string) {
 * map struct to update
  */
 func UpdateOnlyAllowColumns(structNeedToMap interface{}, fillAble []string) interface{} {
+	fmt.Println(structNeedToMap)
 	row := structs.Map(structNeedToMap)
 	var data = make(map[string]interface{})
 	for _, value := range fillAble {

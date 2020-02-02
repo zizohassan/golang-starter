@@ -61,7 +61,7 @@ func (user *User) BeforeCreate(scope *gorm.Scope) error {
 * migration function must be the file name concat with Migrate
 * key word Example : user will be UserMigrate
  */
-func (s *MigrationTables) UserMigrate() {
+func  UserMigrate() {
 	config.DB.AutoMigrate(&User{})
 }
 

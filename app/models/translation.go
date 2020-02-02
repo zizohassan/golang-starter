@@ -22,7 +22,7 @@ type Translation struct {
 * migration function must be the file name concat with Migrate
 * key word Example : user will be UserMigrate
  */
-func (s *MigrationTables) TranslationMigrate() {
+func  TranslationMigrate() {
 	config.DB.AutoMigrate(&Translation{})
 }
 

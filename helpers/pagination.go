@@ -5,6 +5,7 @@ import (
 	"math"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/jinzhu/gorm"
 )
@@ -60,7 +61,7 @@ func Paging(p *Param, result interface{}) *Paginator {
 	}
 
 	if len(p.Preload) > 0 {
-		db = PreloadD(db , p.Preload)
+		db = PreloadD(db, p.Preload)
 	}
 
 	done := make(chan bool, 1)
@@ -106,20 +107,42 @@ func countRecords(db *gorm.DB, anyType interface{}, done chan bool, count *int) 
 	done <- true
 }
 
-func Page(g *gin.Context) int  {
+func Page(g *gin.Context) int {
 	page, _ := strconv.Atoi(g.DefaultQuery("page", "1"))
-	return  page
+	return page
 }
 
-func Limit(g *gin.Context) int  {
+func Limit(g *gin.Context) int {
 	page, _ := strconv.Atoi(g.DefaultQuery("limit", os.Getenv("LIMIT")))
-	return  page
+	return page
 }
 
-func Order(order ...string)[]string   {
+func Order(g *gin.Context, order ...string) []string {
 	var o []string
-	for _ , orderBy := range order{
-		o = append(o , orderBy)
+
+	if g.Query("order") != "" {
+
+		order := strings.SplitN(g.Query("order"), "|", -1)
+
+		for _, orderBy := range order {
+			o = append(o, orderBy)
+		}
+		return o
+
+	} else {
+
+		for _, orderBy := range order {
+			o = append(o, orderBy)
+		}
+		return o
+
 	}
-	return o
 }
+
+//func Order(order ...string)[]string   {
+//	var o []string
+//	for _ , orderBy := range order{
+//		o = append(o , orderBy)
+//	}
+//	return o
+//}

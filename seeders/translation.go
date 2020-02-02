@@ -10,7 +10,7 @@ import (
 *	Seed Function must Have the same file Name then Add Seeder key word
 * 	Example :  file is user function must be UserSeeder
  */
-func (s *Seeder) TranslationSeeder() {
+func  TranslationSeeder() {
 	pages := pages()
 	languages := languages()
 	attr := globalAttrs()

@@ -20,7 +20,7 @@ func Index(g *gin.Context) {
 		DB:      config.DB,
 		Page:    helpers.Page(g),
 		Limit:   helpers.Limit(g),
-		OrderBy: helpers.Order("id desc"),
+		OrderBy: helpers.Order(g,"id desc"),
 		Filters: filter(g),
 		Preload: preload(),
 		ShowSQL: true,
