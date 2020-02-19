@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"golang-starter/app/models"
 	"golang-starter/app/requests/admin/setting"
-	"golang-starter/config"
 	"golang-starter/helpers"
 )
 
@@ -57,24 +56,9 @@ func validateRequest(g *gin.Context) (bool , *models.Setting)   {
 }
 
 /**
-* findOrFail Data
- */
-func FindOrFail(id interface{}) (models.Setting , bool)  {
-	var oldRow models.Setting
-	config.DB.Where("id = ?" , id).Find(&oldRow)
-	if oldRow.ID != 0{
-		return   oldRow , true
-	}
-	return  oldRow , false
-}
-
-/**
 * update row make sure you used UpdateOnlyAllowColumns to update allow columns
 * use fill able method to only update what you need
 */
-func updateColumns(row *models.Setting , oldRow models.Setting) models.Setting {
-	onlyAllowData := helpers.UpdateOnlyAllowColumns(row , models.SettingFillAbleColumn())
-	config.DB.Model(&oldRow).Updates(onlyAllowData)
-	newData  , _ :=  FindOrFail(oldRow.ID)
-	return newData
+func updateColumns(data *models.Setting , oldRow *models.Setting) {
+	models.Update(data, oldRow, models.SettingFillAbleColumn())
 }
