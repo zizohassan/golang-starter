@@ -1,11 +1,9 @@
 package translations
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"golang-starter/app/models"
 	"golang-starter/app/requests/admin/translation"
-	"golang-starter/config"
 	"golang-starter/helpers"
 )
 
@@ -58,25 +56,9 @@ func validateRequest(g *gin.Context) (bool , *models.Translation)   {
 }
 
 /**
-* findOrFail Data
- */
-func FindOrFail(id interface{}) (models.Translation , bool)  {
-	var oldRow models.Translation
-	config.DB.Where("id = ?" , id).Find(&oldRow)
-	if oldRow.ID != 0{
-		return   oldRow , true
-	}
-	return  oldRow , false
-}
-
-/**
 * update row make sure you used UpdateOnlyAllowColumns to update allow columns
 * use fill able method to only update what you need
 */
-func updateColumns(row *models.Translation , oldRow models.Translation) models.Translation {
-	onlyAllowData := helpers.UpdateOnlyAllowColumns(row , models.TranslationFillAbleColumn())
-	fmt.Println("old row"  , onlyAllowData, oldRow)
-	config.DB.Model(&oldRow).Updates(onlyAllowData)
-	newData  , _ :=  FindOrFail(oldRow.ID)
-	return newData
+func updateColumns(data *models.Translation , oldRow *models.Translation)  {
+	models.Update(data, oldRow, models.TranslationFillAbleColumn())
 }

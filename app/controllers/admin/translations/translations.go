@@ -36,9 +36,9 @@ func Index(g *gin.Context) {
  */
 func Show(g *gin.Context) {
 	// find this row or return 404
-	row, find := FindOrFail(g.Param("id"))
-	if !find {
-		helpers.ReturnNotFound(g, helpers.ItemNotFound(g))
+	var row models.Translation
+	// check if this id exits , abort if not
+	if models.InItApi(g).FindOrFail(g.Param("id"), &row); row.ID == 0 {
 		return
 	}
 	// now return row data after transformers
@@ -55,9 +55,9 @@ func Update(g *gin.Context) {
 		return
 	}
 	// find this row or return 404
-	oldRow, find := FindOrFail(g.Param("id"))
-	if !find {
-		helpers.ReturnNotFound(g, helpers.ItemNotFound(g))
+	var oldRow models.Translation
+	// check if this id exits , abort if not
+	if models.InItApi(g).FindOrFail(g.Param("id"), &oldRow); oldRow.ID == 0 {
 		return
 	}
 	// check if page exists
@@ -68,7 +68,7 @@ func Update(g *gin.Context) {
 		}
 	}
 	/// update allow columns
-	oldRow = updateColumns(row, oldRow)
+	updateColumns(row, &oldRow)
 	// now return row data after transformers
 	helpers.OkResponse(g, helpers.DoneUpdate(g), transformers.TranslationResponse(oldRow))
 }
