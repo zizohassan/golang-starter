@@ -2,6 +2,7 @@ package faqs
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
 	"golang-starter/app/models"
 	"golang-starter/app/transformers"
 	"golang-starter/config"
@@ -44,19 +45,20 @@ func Store(g *gin.Context) {
 	/// insert in to answer
 	insertAnswerToDataBase(row.Answer, row.ID)
 	/// get with new data
-	data , _ := FindOrFailWithPreload(row.ID)
+	models.InItApi(g).FindOrFail(g.Param("id"), &row , (func(db *gorm.DB) {
+		db.Preload("Answers")
+	}))
 	/// now return row data after transformers
-	helpers.OkResponse(g, helpers.DoneCreateItem(g), transformers.FaqResponse(data))
+	helpers.OkResponse(g, helpers.DoneCreateItem(g), transformers.FaqResponse(*row))
 }
 
 /***
 * return row with id
  */
 func Show(g *gin.Context) {
-	/// find this row or return 404
-	row, find := FindOrFailWithPreload(g.Param("id"))
-	if !find {
-		helpers.ReturnNotFound(g, helpers.ItemNotFound(g))
+	var row models.Faq
+	// check if this id exits , abort if not
+	if models.InItApi(g).FindOrFail(g.Param("id"), &row); row.ID == 0 {
 		return
 	}
 	/// now return row data after transformers
@@ -68,9 +70,9 @@ func Show(g *gin.Context) {
  */
 func Delete(g *gin.Context) {
 	/// find this row or return 404
-	row, find := FindOrFail(g.Param("id"))
-	if !find {
-		helpers.ReturnNotFound(g, helpers.ItemNotFound(g))
+	var row models.Faq
+	// check if this id exits , abort if not
+	if models.InItApi(g).FindOrFail(g.Param("id"), &row); row.ID == 0 {
 		return
 	}
 	/// delete related answers
@@ -91,9 +93,9 @@ func Update(g *gin.Context) {
 		return
 	}
 	/// find this row or return 404
-	oldRow, find := FindOrFail(g.Param("id"))
-	if !find {
-		helpers.ReturnNotFound(g, helpers.ItemNotFound(g))
+	var oldRow models.Faq
+	// check if this id exits , abort if not
+	if models.InItApi(g).FindOrFail(g.Param("id"), &row); row.ID == 0 {
 		return
 	}
 	/// delete old Answer if user need
@@ -103,7 +105,7 @@ func Update(g *gin.Context) {
 	/// insert in to answer
 	insertAnswerToDataBase(row.Answer, oldRow.ID)
 	/// update allow columns
-	oldRow = updateColumns(row, oldRow)
+	updateColumns(row, &oldRow)
 	/// now return row data after transformers
 	helpers.OkResponse(g, helpers.DoneUpdate(g), transformers.FaqResponse(oldRow))
 }

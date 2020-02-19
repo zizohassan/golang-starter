@@ -3,6 +3,7 @@ package pages
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/iancoleman/strcase"
+	"github.com/jinzhu/gorm"
 	"golang-starter/app/models"
 	"golang-starter/app/transformers"
 	"golang-starter/config"
@@ -36,9 +37,13 @@ func Index(g *gin.Context) {
  */
 func Show(g *gin.Context) {
 	// find this row or return 404
-	row, find := FindOrFailWithPreload(g.Param("id"), helpers.LangHeader(g))
-	if !find {
-		helpers.ReturnNotFound(g, helpers.ItemNotFound(g))
+	var row models.Page
+	// check if this id exits , abort if not
+	if models.InItApi(g).FindOrFail(g.Param("id"), &row , (func(db *gorm.DB) {
+		db.Preload("Translations" , "lang = ?", helpers.LangHeader(g))
+	}) , (func(db *gorm.DB) {
+		db.Preload("Images")
+	})); row.ID == 0 {
 		return
 	}
 	// now return row data after transformers
@@ -57,9 +62,9 @@ func Update(g *gin.Context) {
 		return
 	}
 	// find this row or return 404
-	oldRow, find := FindOrFail(g.Param("id"))
-	if !find {
-		helpers.ReturnNotFound(g, helpers.ItemNotFound(g))
+	var oldRow models.Page
+	// check if this id exits , abort if not
+	if models.InItApi(g).FindOrFail(g.Param("id"), &oldRow ); oldRow.ID == 0 {
 		return
 	}
 	/// delete all images if reset flag in the url
@@ -71,7 +76,7 @@ func Update(g *gin.Context) {
 	/// insert translations
 	insertTranslationsInDataBase(row.Translation, int(oldRow.ID))
 	/// update allow columns
-	oldRow = updateColumns(row, oldRow, lang)
+	updateColumns(row, &oldRow, lang)
 	// now return row data after transformers
 	helpers.OkResponse(g, helpers.DoneUpdate(g), transformers.PageResponse(oldRow))
 }

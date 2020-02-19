@@ -5,7 +5,6 @@ import (
 	"github.com/thedevsaddam/govalidator"
 	"golang-starter/app/models"
 	"golang-starter/app/requests/admin/user"
-	"golang-starter/config"
 	"golang-starter/helpers"
 )
 
@@ -63,28 +62,16 @@ func validateRequest(g *gin.Context, action string) (bool, *models.User) {
 }
 
 /**
-* findOrFail Data
- */
-func FindOrFail(id interface{}) (models.User, bool) {
-	var oldRow models.User
-	config.DB.Where("id = ?" , id).Find(&oldRow)
-	if oldRow.ID != 0 {
-		return oldRow, true
-	}
-	return oldRow, false
-}
-
-/**
 * update row make sure you used UpdateOnlyAllowColumns to update allow columns
 * use fill able method to only update what you need
  */
-func updateColumns(row *models.User, oldRow models.User) models.User {
-	if row.Password != "" {
-		password, _ := helpers.HashPassword(row.Password)
-		row.Password = password
+func updateColumns(data *models.User, oldRow *models.User) {
+	////check if password not empty
+	if data.Password != "" {
+		password, _ := helpers.HashPassword(data.Password)
+		data.Password = password
 	}
-	onlyAllowData := helpers.UpdateOnlyAllowColumns(row, models.UserFillAbleColumn())
-	config.DB.Model(&oldRow).Updates(onlyAllowData)
-	newData  , _ :=  FindOrFail(oldRow.ID)
-	return newData
+	// update based on fill able data and assign the new data
+	// the new data will set in the same pointer
+	models.Update(data, oldRow, models.UserFillAbleColumn())
 }

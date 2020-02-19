@@ -15,6 +15,8 @@ func Run()  {
 	* admin / auth / visitors
 	*/
 	Routing(r)
+	/// register gin object
+	Container.Register("gin", r)
 	/**
 	* start app on port to change port just edit APP_PORT in
 	* env file like :9090

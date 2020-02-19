@@ -97,9 +97,6 @@ func FindOrFailImage(id interface{}) (models.PageImage, bool) {
 * update row make sure you used UpdateOnlyAllowColumns to update allow columns
 * use fill able method to only update what you need
  */
-func updateColumns(row *models.Page, oldRow models.Page, lang string) models.Page {
-	onlyAllowData := helpers.UpdateOnlyAllowColumns(row, models.PageFillAbleColumn())
-	config.DB.Model(&oldRow).Updates(onlyAllowData)
-	newData, _ := FindOrFailWithPreload(oldRow.ID, lang)
-	return newData
+func updateColumns(data *models.Page, oldRow *models.Page, lang string) {
+	models.Update(data, oldRow, models.PageFillAbleColumn() , "Translations" , "Images")
 }

@@ -61,7 +61,7 @@ func (user *User) BeforeCreate(scope *gorm.Scope) error {
 * migration function must be the file name concat with Migrate
 * key word Example : user will be UserMigrate
  */
-func  UserMigrate() {
+func UserMigrate() {
 	config.DB.AutoMigrate(&User{})
 }
 
@@ -71,7 +71,6 @@ func  UserMigrate() {
 func UserFillAbleColumn() []string {
 	return []string{"name", "email", "role", "password", "block"}
 }
-
 
 /**
 * active category only

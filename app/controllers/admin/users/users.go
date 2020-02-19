@@ -19,7 +19,7 @@ func Index(g *gin.Context) {
 		DB:      config.DB,
 		Page:    helpers.Page(g),
 		Limit:   helpers.Limit(g),
-		OrderBy: helpers.Order(g,"id desc"),
+		OrderBy: helpers.Order(g, "id desc"),
 		Filters: filter(g),
 		Preload: preload(),
 		ShowSQL: true,
@@ -56,10 +56,9 @@ func Store(g *gin.Context) {
 * return row with id
  */
 func Show(g *gin.Context) {
-	// find this row or return 404
-	row, find := FindOrFail(g.Param("id"))
-	if !find {
-		helpers.ReturnNotFound(g, helpers.ItemNotFound(g))
+	var row models.User
+	// check if this id exits , abort if not
+	if models.InItApi(g).FindOrFail(g.Param("id"), &row); row.ID == 0 {
 		return
 	}
 	// now return row data after transformers
@@ -70,10 +69,9 @@ func Show(g *gin.Context) {
 * delete row with id
  */
 func Delete(g *gin.Context) {
-	// find this row or return 404
-	row, find := FindOrFail(g.Param("id"))
-	if !find {
-		helpers.ReturnNotFound(g, helpers.ItemNotFound(g))
+	var row models.User
+	// check if this id exits , abort if not
+	if models.InItApi(g).FindOrFail(g.Param("id"), &row); row.ID == 0 {
 		return
 	}
 	config.DB.Unscoped().Delete(&row)
@@ -86,25 +84,25 @@ func Delete(g *gin.Context) {
  */
 func Update(g *gin.Context) {
 	// check if request valid
-	valid, row := validateRequest(g, "update")
+	valid, data := validateRequest(g, "update")
 	if !valid {
 		return
 	}
 	// find this row or return 404
-	oldRow, find := FindOrFail(g.Param("id"))
-	if !find {
-		helpers.ReturnNotFound(g, helpers.ItemNotFound(g))
+	var oldRow models.User
+	// check if this id exits , abort if not
+	if models.InItApi(g).FindOrFail(g.Param("id"), &oldRow); oldRow.ID == 0 {
 		return
 	}
 	/// check if this email exists
 	var count int
-	config.DB.Model(models.User{}).Where("email = ? AND email != ?", row.Email, oldRow.Email).Count(&count)
+	config.DB.Model(models.User{}).Where("email = ? AND email != ?", data.Email, oldRow.Email).Count(&count)
 	if count > 0 {
 		helpers.ReturnDuplicateData(g, "email")
 		return
 	}
 	/// update allow columns
-	oldRow = updateColumns(row, oldRow)
+	updateColumns(data, &oldRow)
 	// now return row data after transformers
 	helpers.OkResponse(g, helpers.DoneUpdate(g), transformers.UserResponse(oldRow))
 }

@@ -24,9 +24,8 @@ func insertAnswerToDataBase(answers []string, id uint) {
 }
 
 /**
-*  delete assign pages
+*  delete answers
 */
-
 func deleteAnswers(faqId uint)  {
 	var rows models.Answer
 	config.DB.Unscoped().Where("faq_id = ? ", faqId).Delete(&rows)

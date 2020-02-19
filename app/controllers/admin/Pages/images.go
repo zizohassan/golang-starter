@@ -1,8 +1,8 @@
 package pages
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
 	"golang-starter/app/models"
 	"golang-starter/app/requests/admin/page"
 	"golang-starter/app/transformers"
@@ -32,15 +32,22 @@ func UploadImage(g *gin.Context) {
 	///get id
 	id, _ := strconv.Atoi(g.Param("id"))
 	// find this row or return 404
-	_, find := FindOrFail(id)
-	if !find {
-		helpers.ReturnNotFound(g, helpers.ItemNotFound(g))
+	var page models.Page
+	// check if this id exits , abort if not
+	if models.InItApi(g).FindOrFail(g.Param("id"), &page); page.ID == 0 {
 		return
 	}
 	/// upload images and insert in database
 	insertImageInDataBase(g, row.Images, id)
 	/// get the new data with images
-	newPage, _ := FindOrFailWithPreload(id, helpers.LangHeader(g))
+	var newPage models.Page
+	if models.InItApi(g).FindOrFail(g.Param("id"), &row , (func(db *gorm.DB) {
+		db.Preload("Translations" , "lang = ?", helpers.LangHeader(g))
+	}) , (func(db *gorm.DB) {
+		db.Preload("Images")
+	})); newPage.ID == 0 {
+		return
+	}
 	helpers.OkResponse(g, helpers.DoneUpdate(g), transformers.PageResponse(newPage))
 }
 
@@ -50,9 +57,9 @@ func UploadImage(g *gin.Context) {
  */
 func DeleteImage(g *gin.Context) {
 	// find this row or return 404
-	row, find := FindOrFailImage(g.Param("id"))
-	if !find {
-		helpers.ReturnNotFound(g, helpers.ItemNotFound(g))
+	var row models.PageImage
+	// check if this id exits , abort if not
+	if models.InItApi(g).FindOrFail(g.Param("id"), &row); row.ID == 0 {
 		return
 	}
 	config.DB.Unscoped().Delete(&row)
@@ -65,9 +72,9 @@ func DeleteImage(g *gin.Context) {
  */
 func DeletePageImages(g *gin.Context) {
 	// find this row or return 404
-	row, find := FindOrFail(g.Param("id"))
-	if !find {
-		helpers.ReturnNotFound(g, helpers.ItemNotFound(g))
+	var row models.Page
+	// check if this id exits , abort if not
+	if models.InItApi(g).FindOrFail(g.Param("id"), &row); row.ID == 0 {
 		return
 	}
 	deleteAllPageImage(row.ID)
@@ -90,9 +97,7 @@ func deleteAllPageImage(id uint) {
  */
 func insertImageInDataBase(g *gin.Context, images []string, id int) {
 	if len(images) > 0 {
-		fmt.Println("Images upload ", images)
 		uploadedImages := helpers.MultiDecodeImage(g, images)
-		fmt.Println("Images upload ", uploadedImages)
 		///// loop and insert image in database
 		if len(uploadedImages) > 0 {
 			for _, upload := range uploadedImages {
