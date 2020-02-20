@@ -65,6 +65,14 @@ func (u *User) AfterCreate(scope *gorm.Scope) (err error) {
 	return
 }
 
+/*
+* event run after delete user
+ */
+func (u *User) AfterDelete(tx *gorm.DB) (err error) {
+	DecreaseOnDelete(u.Status , "users")
+	return
+}
+
 /**
 * migration function must be the file name concat with Migrate
 * key word Example : user will be UserMigrate

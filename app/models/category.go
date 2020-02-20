@@ -32,6 +32,14 @@ func (u *Category) AfterCreate(scope *gorm.Scope) (err error) {
 	return
 }
 
+/*
+* event run after delete Category
+ */
+func (u *Category) AfterDelete(tx *gorm.DB) (err error) {
+	DecreaseOnDelete(u.Status , "categories")
+	return
+}
+
 /**
 * you can update these column only
  */

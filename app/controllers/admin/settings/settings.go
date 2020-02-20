@@ -26,8 +26,10 @@ func Index(g *gin.Context) {
 	}, &rows)
 	// transform slice
 	response := make(map[string]interface{})
-	response["status"] = models.GetActionByModule("settings")
-	response["records"] = transformers.SettingsResponse(rows)
+	response["status"] = transformers.ActionsResponse(models.GetActionByModule("settings"))
+	response["data"] = transformers.SettingsResponse(rows)
+	// transform slice
+	paginator.Records = response
 	// return response
 	helpers.OkResponseWithPaging(g, helpers.DoneGetAllItems(g), paginator)
 }

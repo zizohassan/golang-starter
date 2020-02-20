@@ -24,6 +24,11 @@ func filter(g *gin.Context) []string {
 	if  g.Query("setting_type") != ""{
 		filter = append(filter, `setting_type like "%` + g.Query("setting_type") + `%"`)
 	}
+	if  g.Query("status") != ""{
+		if g.Query("status") != "all"{
+			filter = append(filter, `status = "` + g.Query("status") + `"`)
+		}
+	}
 	return filter
 }
 

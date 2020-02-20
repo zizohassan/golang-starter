@@ -25,11 +25,10 @@ func Index(g *gin.Context) {
 		ShowSQL: true,
 	}, &rows)
 	response := make(map[string]interface{})
-	response["status"] = models.GetActionByModule("users")
-	response["records"] = transformers.UsersResponse(rows)
+	response["status"] = transformers.ActionsResponse(models.GetActionByModule("users"))
+	response["data"] = transformers.UsersResponse(rows)
 	// transform slice
 	paginator.Records = response
-
 	// return response
 	helpers.OkResponseWithPaging(g, helpers.DoneGetAllItems(g), paginator)
 }

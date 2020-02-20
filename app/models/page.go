@@ -36,6 +36,14 @@ func (u *Page) AfterCreate(scope *gorm.Scope) (err error) {
 	return
 }
 
+/*
+* event run after delete Faq
+ */
+func (u *Page) AfterDelete(tx *gorm.DB) (err error) {
+	DecreaseOnDelete(u.Status, "pages")
+	return
+}
+
 /**
 * you can update these column only
  */

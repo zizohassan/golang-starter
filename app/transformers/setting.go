@@ -5,13 +5,16 @@ import "golang-starter/app/models"
 /**
 * stander the single setting response
  */
-func SettingResponse(translation models.Setting) map[string]interface{} {
+func SettingResponse(setting models.Setting) map[string]interface{} {
 	var u = make(map[string]interface{})
-	u["value"] = translation.Value
-	u["id"] = translation.ID
-	u["name"] = translation.Name
-	u["slug"] = translation.Slug
-	u["setting_type"] = translation.SettingType
+	u["value"] = setting.Value
+	u["id"] = setting.ID
+	u["name"] = setting.Name
+	u["slug"] = setting.Slug
+	u["setting_type"] = setting.SettingType
+	u["created_at"] = setting.CreatedAt
+	u["updated_at"] = setting.UpdatedAt
+
 
 	return u
 }
@@ -19,10 +22,10 @@ func SettingResponse(translation models.Setting) map[string]interface{} {
 /**
 * stander the Multi settings response
  */
-func SettingsResponse(translations []models.Setting) []map[string]interface{} {
+func SettingsResponse(settings []models.Setting) []map[string]interface{} {
 	var u  = make([]map[string]interface{} , 0)
-	for _ , translation := range translations {
-		u = append(u , SettingResponse(translation))
+	for _ , setting := range settings {
+		u = append(u , SettingResponse(setting))
 	}
 	return u
 }

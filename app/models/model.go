@@ -97,9 +97,9 @@ func InItApi(g *gin.Context) G {
 func Increase(tableName string, columnName string, id interface{}, where ...string) {
 	if len(where) > 0 {
 		db := "UPDATE " + tableName + " SET " + columnName + " = " + columnName + " + 1 WHERE "
-		for i, w := range where {
-			db += w
-			if i != 0 {
+		for _, w := range where {
+			db += ` ` + w + ` `
+			if len(where) > 1 {
 				db += ` AND`
 			}
 		}
@@ -115,11 +115,9 @@ func Increase(tableName string, columnName string, id interface{}, where ...stri
 func Decrease(tableName string, columnName string, id interface{}, where ...string) {
 	if len(where) > 0 {
 		db := "UPDATE " + tableName + " SET " + columnName + " = " + columnName + " - 1 WHERE "
-		for i, w := range where {
-			db += w
-			if i != 0 {
-				db += ` AND`
-			}
+		for _, w := range where {
+			db += ` ` + w + ` `
+			db += ` AND `
 		}
 		db += columnName + " > 0 "
 		config.DB.Exec(db)

@@ -14,6 +14,7 @@ type Setting struct {
 	gorm.Model
 	Name        string `gorm:"type:varchar(100);" json:"name"`
 	Value       string `gorm:"type:varchar(255);" json:"value"`
+	Status      string `gorm:"type:varchar(20);" json:"status"`
 	SettingType string `gorm:"type:varchar(20);" json:"setting_type"`
 	Slug        string `gorm:"type:varchar(50);" json:"slug"`
 }
@@ -26,11 +27,19 @@ func (u *Setting) AfterCreate(scope *gorm.Scope) (err error) {
 	return
 }
 
+/*
+* event run after delete Faq
+ */
+func (u *Setting) AfterDelete(tx *gorm.DB) (err error) {
+	DecreaseOnDelete(u.Status, "Settings")
+	return
+}
+
 /**
 * migration function must be the file name concat with Migrate
 * key word Example : user will be UserMigrate
  */
-func  SettingMigrate() {
+func SettingMigrate() {
 	config.DB.AutoMigrate(&Setting{})
 }
 

@@ -13,7 +13,7 @@ import (
 type Faq struct {
 	gorm.Model
 	Question string   `gorm:"type:varchar(255);" json:"question"`
-	Status   int      `gorm:"type:tinyint(1);" json:"status"`
+	Status   string   `gorm:"type:varchar(20);" json:"status"`
 	Answer   []string `gorm:"-" json:"answer"`
 	Answers  []Answer `gorm:"association_autoupdate:false;association_autocreate:false" json:"answers"`
 }
@@ -22,7 +22,7 @@ type Faq struct {
 * migration function must be the file name concat with Migrate
 * key word Example : user will be UserMigrate
  */
-func  FaqMigrate() {
+func FaqMigrate() {
 	config.DB.AutoMigrate(&Faq{})
 }
 
@@ -31,6 +31,14 @@ func  FaqMigrate() {
  */
 func (u *Faq) AfterCreate(scope *gorm.Scope) (err error) {
 	IncreaseOnCreate("faqs")
+	return
+}
+
+/*
+* event run after delete Faq
+ */
+func (u *Faq) AfterDelete(tx *gorm.DB) (err error) {
+	DecreaseOnDelete(u.Status, "faqs")
 	return
 }
 
@@ -43,7 +51,7 @@ func FaqFillAbleColumn() []string {
 
 /**
 * active questions only
-*/
+ */
 func ActiveFaq(db *gorm.DB) *gorm.DB {
 	return db.Where("status = 2")
 }

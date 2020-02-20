@@ -13,6 +13,7 @@ func ActionResponse(action models.Action) map[string]interface{} {
 	u["slug"] = action.Slug
 	u["module_name"] = action.ModuleName
 	u["slug"] = action.Slug
+	u["count"] = action.Count
 
 	return u
 }
@@ -26,6 +27,5 @@ func ActionsResponse(actions []models.Action) []map[string]interface{} {
 		u = append(u , ActionResponse(action))
 	}
 	return u
-
 }
 

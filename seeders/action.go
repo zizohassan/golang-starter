@@ -16,10 +16,10 @@ func ActionSeeder() {
 	var modules = make(map[string]interface{})
 	defaultActions["all"] = models.ALL
 	////////////// start modules have all action only
-	modules["settings"] = defaultActions
 	///////////// end modules has all action only
 	defaultActions["active"] =  models.ACTIVE
 	////////////// start modules have all , active actions
+	modules["settings"] = defaultActions
 	////////////// end modules have all , active  actions
 	defaultActions["deactivate"] = models.DEACTIVATE
 	////////////// start modules have all , active , deactivate actions

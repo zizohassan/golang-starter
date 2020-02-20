@@ -23,7 +23,7 @@ func MigrateAllTable() {
 }
 
 /**
-* drop all tables 
+* drop all tables
 */
 
 type query struct {
