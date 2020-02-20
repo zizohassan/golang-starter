@@ -31,7 +31,20 @@ func (u *Setting) AfterCreate(scope *gorm.Scope) (err error) {
 * event run after delete Faq
  */
 func (u *Setting) AfterDelete(tx *gorm.DB) (err error) {
-	DecreaseOnDelete(u.Status, "Settings")
+	DecreaseOnDelete(u.Status, "settings")
+	return
+}
+
+/**
+* update status
+ */
+func (u *Setting) BeforeUpdate() (err error) {
+	var setting Setting
+	config.DB.First(&setting , u.ID)
+	if setting.Status != u.Status{
+		DecreaseRow(setting.Status, "settings")
+		IncreaseRow(u.Status , "settings")
+	}
 	return
 }
 

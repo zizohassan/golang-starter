@@ -41,6 +41,19 @@ func (u *Category) AfterDelete(tx *gorm.DB) (err error) {
 }
 
 /**
+* update status
+ */
+func (u *Category) BeforeUpdate() (err error) {
+	var category Category
+	config.DB.First(&category , u.ID)
+	if category.Status != u.Status{
+		DecreaseRow(category.Status, "categories")
+		IncreaseRow(u.Status , "categories")
+	}
+	return
+}
+
+/**
 * you can update these column only
  */
 func CategoryFillAbleColumn() []string {

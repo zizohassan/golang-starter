@@ -45,6 +45,19 @@ func (u *Page) AfterDelete(tx *gorm.DB) (err error) {
 }
 
 /**
+* update status
+ */
+func (u *Page) BeforeUpdate() (err error) {
+	var page Page
+	config.DB.First(&page , u.ID)
+	if page.Status != u.Status{
+		DecreaseRow(page.Status, "pages")
+		IncreaseRow(u.Status , "pages")
+	}
+	return
+}
+
+/**
 * you can update these column only
  */
 func PageFillAbleColumn() []string {

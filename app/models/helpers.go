@@ -8,7 +8,7 @@ import (
 * add to active and all
  */
 func IncreaseOnCreate(moduleName string) {
-	Increase("actions", "count", nil, `slug =  "`+ACTIVE+`_`+moduleName+`"`)
+	IncreaseRow(ACTIVE , moduleName)
 	Increase("actions", "count", nil, `slug = "`+ALL+`_`+moduleName+`"`)
 }
 
@@ -17,8 +17,16 @@ func IncreaseOnCreate(moduleName string) {
  */
 
 func DecreaseOnDelete(status string , moduleName string)  {
-	Decrease("actions", "count", nil, `module_name =  "`+moduleName+`"` , `verb = "`+status+`"`)
+	DecreaseRow(status , moduleName)
 	Decrease("actions", "count", nil, `slug = "`+ALL+`_user"`)
+}
+
+func DecreaseRow(status string , moduleName string)  {
+	Decrease("actions", "count", nil, `module_name =  "`+moduleName+`"` , `verb = "`+status+`"`)
+}
+
+func IncreaseRow(status string , moduleName string)  {
+	Increase("actions", "count", nil, `module_name =  "`+moduleName+`"` , `verb = "`+status+`"`)
 }
 
 func GetActionByModule(moduleName string) []Action {

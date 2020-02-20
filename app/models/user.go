@@ -74,6 +74,19 @@ func (u *User) AfterDelete(tx *gorm.DB) (err error) {
 }
 
 /**
+* update status
+ */
+func (u *User) BeforeUpdate() (err error) {
+	var user User
+	config.DB.First(&user , u.ID)
+	if user.Status != u.Status{
+		DecreaseRow(user.Status, "users")
+		IncreaseRow(u.Status , "users")
+	}
+	return
+}
+
+/**
 * migration function must be the file name concat with Migrate
 * key word Example : user will be UserMigrate
  */

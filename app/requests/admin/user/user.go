@@ -17,7 +17,7 @@ func Store(r *http.Request, request *models.User) *govalidator.Validator {
 		"name":     []string{"required", "min:6", "max:50"},
 		"email":    []string{"required", "min:6", "max:50", "email"},
 		"password": []string{"required", "min:6", "max:50"},
-		"block":    []string{"required", "between:1,2"},
+		"status":    []string{"required"},
 		"role":     []string{"required", "between:1,2"},
 	}
 
@@ -25,7 +25,7 @@ func Store(r *http.Request, request *models.User) *govalidator.Validator {
 		"name":     []string{helpers.Required(lang), helpers.Min(lang, "6"), helpers.Max(lang, "50")},
 		"email":    []string{helpers.Required(lang), helpers.Min(lang, "6"), helpers.Max(lang, "50"), helpers.Email(lang)},
 		"password": []string{helpers.Required(lang), helpers.Min(lang, "6"), helpers.Max(lang, "50")},
-		"block":    []string{helpers.Required(lang), helpers.Min(lang, "1"), helpers.Max(lang, "2")},
+		"status":    []string{helpers.Required(lang)},
 		"role":     []string{helpers.Required(lang), helpers.Min(lang, "1"), helpers.Max(lang, "2")},
 	}
 
@@ -49,7 +49,7 @@ func Update(r *http.Request, request *models.User) *govalidator.Validator {
 		"name":     []string{"required", "min:6", "max:50"},
 		"email":    []string{"required", "min:6", "max:50", "email"},
 		"password": []string{"max:50"},
-		"block":    []string{"required", "between:1,2"},
+		"status":    []string{"required"},
 		"role":     []string{"required", "between:1,2"},
 	}
 
@@ -57,7 +57,7 @@ func Update(r *http.Request, request *models.User) *govalidator.Validator {
 		"name":     []string{helpers.Required(lang), helpers.Min(lang, "6"), helpers.Max(lang, "50")},
 		"email":    []string{helpers.Required(lang), helpers.Min(lang, "6"), helpers.Max(lang, "50"), helpers.Email(lang)},
 		"password": []string{helpers.Max(lang, "50")},
-		"block":    []string{helpers.Required(lang), helpers.Min(lang, "1"), helpers.Max(lang, "2")},
+		"status":    []string{helpers.Required(lang)},
 		"role":     []string{helpers.Required(lang), helpers.Min(lang, "1"), helpers.Max(lang, "2")},
 	}
 

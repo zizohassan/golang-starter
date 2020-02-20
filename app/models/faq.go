@@ -43,6 +43,19 @@ func (u *Faq) AfterDelete(tx *gorm.DB) (err error) {
 }
 
 /**
+* update status
+ */
+func (u *Faq) BeforeUpdate() (err error) {
+	var faq Faq
+	config.DB.First(&faq , u.ID)
+	if faq.Status != u.Status{
+		DecreaseRow(faq.Status, "faqs")
+		IncreaseRow(u.Status , "faqs")
+	}
+	return
+}
+
+/**
 * you can update these column only
  */
 func FaqFillAbleColumn() []string {
