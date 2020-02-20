@@ -54,18 +54,6 @@ func validateRequest(g *gin.Context) (bool, *models.Page) {
 	return true, row
 }
 
-/**
-* findOrFail Data
- */
-func FindOrFail(id interface{}) (models.Page, bool) {
-	var oldRow models.Page
-	config.DB.Where("id = ? ", id).Find(&oldRow)
-	if oldRow.ID != 0 {
-		return oldRow, true
-	}
-	return oldRow, false
-}
-
 func FindOrFailWithPreload(id interface{}, lang string) (models.Page, bool) {
 	var oldRow models.Page
 	db := config.DB.Where("id = ? ", id)
@@ -73,19 +61,6 @@ func FindOrFailWithPreload(id interface{}, lang string) (models.Page, bool) {
 	db = db.Preload("Translations", "lang = ?", lang)
 	// preload
 	db = helpers.PreloadD(db, []string{"Images"})
-	db.Find(&oldRow)
-	if oldRow.ID != 0 {
-		return oldRow, true
-	}
-	return oldRow, false
-}
-
-/**
-* findOrFail Image
- */
-func FindOrFailImage(id interface{}) (models.PageImage, bool) {
-	var oldRow models.PageImage
-	db := config.DB.Where("id = ? ", id)
 	db.Find(&oldRow)
 	if oldRow.ID != 0 {
 		return oldRow, true

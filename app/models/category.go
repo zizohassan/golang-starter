@@ -13,7 +13,7 @@ import (
 type Category struct {
 	gorm.Model
 	Name   string `gorm:"type:varchar(50);" json:"name"`
-	Status int    `gorm:"type:tinyint(1);" json:"status"`
+	Status string `gorm:"type:varchar(20);" json:"status"`
 }
 
 /**
@@ -22,6 +22,14 @@ type Category struct {
  */
 func CategoryMigrate() {
 	config.DB.AutoMigrate(&Category{})
+}
+
+/*
+* event run after add Category
+ */
+func (u *Category) AfterCreate(scope *gorm.Scope) (err error) {
+	IncreaseOnCreate("categories")
+	return
 }
 
 /**
@@ -35,5 +43,5 @@ func CategoryFillAbleColumn() []string {
 * active category only
  */
 func ActiveCategory(db *gorm.DB) *gorm.DB {
-	return db.Where("status = 2")
+	return db.Where("status = " + ACTIVE)
 }

@@ -12,7 +12,9 @@ func UserResponse(user models.User) map[string]interface{} {
 	u["email"] = user.Email
 	u["role"] = user.Role
 	u["token"] = user.Token
-	u["block"] = user.Block
+	u["block"] = user.Status
+	u["created_at"] = user.CreatedAt
+	u["updated_at"] = user.UpdatedAt
 
 	return u
 }

@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"golang-starter/app/models"
 	"golang-starter/app/requests/visitor"
@@ -34,7 +33,6 @@ func Login(g *gin.Context) {
 	* check if user not blocked
 	 */
 	user, valid := checkUserExistsNotBlocked(g, login.Email, "")
-	fmt.Println(user, valid)
 	if !valid {
 		return
 	}
@@ -88,7 +86,7 @@ func Register(g *gin.Context) {
 	* block user (1 , 2) 2 is not block 1 is block
 	*/
 	user.Role =  1
-	user.Block = 2
+	user.Status = models.ACTIVE
 	/**
 	* create new user based on register struct
 	* token , role  , block will set with event
@@ -217,7 +215,7 @@ func checkUserExistsNotBlocked(g *gin.Context, email string, token string) (mode
 		return user, false
 	}
 	// if user block
-	if user.Block == 1 {
+	if user.Status == models.BLOCK {
 		helpers.ReturnForbidden(g, "You are blocked from the system")
 		return user, false
 	}

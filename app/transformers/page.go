@@ -10,6 +10,8 @@ func PageResponse(page models.Page) map[string]interface{} {
 	u["name"] = page.Name
 	u["id"] = page.ID
 	u["status"] = page.Status
+	u["created_at"] = page.CreatedAt
+	u["updated_at"] = page.UpdatedAt
 	u["translations"] = TranslationsResponse(page.Translations)
 	u["images"] = PageImagesResponse(page.Images)
 

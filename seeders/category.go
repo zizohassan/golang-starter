@@ -22,7 +22,7 @@ func CategorySeeder() {
 func newCategory()  {
 	data := models.Category{
 		Name:     faker.Internet().UserName(),
-		Status:   faker.RandomInt(1,2),
+		Status:   models.ACTIVE,
 	}
 	config.DB.Create(&data)
 }

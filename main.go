@@ -7,7 +7,6 @@ import (
 	"golang-starter/config"
 	"golang-starter/providers"
 	"golang-starter/seeders"
-	"os"
 )
 
 func main() {
@@ -21,7 +20,6 @@ func main() {
 	}
 	/**
 	* add custom role to validation
-	*
 	 */
 	requests.Init()
 	/**
@@ -39,7 +37,7 @@ func main() {
 	* to stop delete tables make DROP_ALL_TABLES false in env file
 	* if you need to stop auto migration just stop this line
 	 */
-	models.MigrateAllTable(os.Getenv("PRODUCTION_MODEL_PATH"))
+	models.MigrateAllTable()
 	/**
 	* this function will open seeders folder look inside all files
 	* search for seeders function and seed execute these function

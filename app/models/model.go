@@ -8,6 +8,13 @@ import (
 	"reflect"
 )
 
+/// actions
+var ACTIVE = "activate"
+var DEACTIVATE = "deactivate"
+var BLOCK = "block"
+var ALL = "all"
+var TRASH = "trash"
+
 type G struct {
 	Gin *gin.Context
 }
@@ -21,7 +28,7 @@ type ModelFunction func(db *gorm.DB)
 * then  retrieve id from struct with refection
 * if we not found id we will abort gin and return
  */
-func (g G) FindOrFail(id interface{}, structBind interface{} , appendFunction ...ModelFunction) {
+func (g G) FindOrFail(id interface{}, structBind interface{}, appendFunction ...ModelFunction) {
 	appendFunctionsToQuery(appendFunction).Where("id = ? ", id).First(structBind)
 	findId := reflect.ValueOf(structBind).Elem().FieldByName("ID").Uint()
 	if findId == 0 {
@@ -82,4 +89,41 @@ func InItApi(g *gin.Context) G {
 	var k G
 	k.Gin = g
 	return k
+}
+
+/***
+* increase 1 on column or with some conditions
+ */
+func Increase(tableName string, columnName string, id interface{}, where ...string) {
+	if len(where) > 0 {
+		db := "UPDATE " + tableName + " SET " + columnName + " = " + columnName + " + 1 WHERE "
+		for i, w := range where {
+			db += w
+			if i != 0 {
+				db += ` AND`
+			}
+		}
+		config.DB.Exec(db)
+		return
+	}
+	config.DB.Exec("UPDATE "+tableName+" SET "+columnName+" = "+columnName+" + 1 WHERE id = ?", id)
+}
+
+/***
+* Decrease 1 on column or with some conditions
+ */
+func Decrease(tableName string, columnName string, id interface{}, where ...string) {
+	if len(where) > 0 {
+		db := "UPDATE " + tableName + " SET " + columnName + " = " + columnName + " - 1 WHERE "
+		for i, w := range where {
+			db += w
+			if i != 0 {
+				db += ` AND`
+			}
+		}
+		db += columnName + " > 0 "
+		config.DB.Exec(db)
+		return
+	}
+	config.DB.Exec("UPDATE "+tableName+" SET "+columnName+" = "+columnName+" - 1 WHERE id = ? AND WHERE "+columnName+" > 0", id)
 }

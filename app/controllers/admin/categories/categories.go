@@ -25,7 +25,9 @@ func Index(g *gin.Context) {
 		ShowSQL: true,
 	}, &rows)
 	// transform slice
-	paginator.Records = transformers.CategoriesResponse(rows)
+	response := make(map[string]interface{})
+	response["status"] = models.GetActionByModule("categories")
+	response["records"] = transformers.CategoriesResponse(rows)
 	// return response
 	helpers.OkResponseWithPaging(g, helpers.DoneGetAllItems(g), paginator)
 }

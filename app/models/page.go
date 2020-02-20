@@ -13,7 +13,7 @@ import (
 type Page struct {
 	gorm.Model
 	Name         string              `gorm:"type:varchar(50);" json:"name"`
-	Status       int                 `gorm:"type:tinyint(1);" json:"status"`
+	Status       string              `gorm:"type:varchar(20);" json:"status"`
 	Image        []string            `gorm:"-" json:"image"`
 	Translation  []map[string]string `gorm:"-" json:"translation"`
 	Translations []Translation       `gorm:"association_autoupdate:false;association_autocreate:false" json:"translations"`
@@ -24,8 +24,16 @@ type Page struct {
 * migration function must be the file name concat with Migrate
 * key word Example : user will be UserMigrate
  */
-func  PageMigrate() {
+func PageMigrate() {
 	config.DB.AutoMigrate(&Page{})
+}
+
+/*
+* event run after add Page
+ */
+func (u *Page) AfterCreate(scope *gorm.Scope) (err error) {
+	IncreaseOnCreate("pages")
+	return
 }
 
 /**
@@ -35,10 +43,9 @@ func PageFillAbleColumn() []string {
 	return []string{"name", "status"}
 }
 
-
 /**
 * active Page only
  */
 func ActivePage(db *gorm.DB) *gorm.DB {
-	return db.Where("status = 2")
+	return db.Where("status = " + ACTIVE)
 }

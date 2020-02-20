@@ -2,7 +2,6 @@ package translations
 
 import (
 	"github.com/gin-gonic/gin"
-	pages "golang-starter/app/controllers/admin/Pages"
 	"golang-starter/app/models"
 	"golang-starter/app/transformers"
 	"golang-starter/config"
@@ -62,9 +61,10 @@ func Update(g *gin.Context) {
 	}
 	// check if page exists
 	if row.PageId != 0 {
-		_, pageExits := pages.FindOrFail(row.PageId)
-		if !pageExits {
-			helpers.ReturnNotFound(g, helpers.ItemNotFound(g))
+		var page models.Page
+		// check if this id exits , abort if not
+		if models.InItApi(g).FindOrFail(row.PageId, &page); page.ID == 0 {
+			return
 		}
 	}
 	/// update allow columns

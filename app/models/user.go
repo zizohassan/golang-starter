@@ -17,7 +17,7 @@ type User struct {
 	Role     int    `gorm:"_" json:"role"`
 	Password string `gorm:"size:255" json:"password"`
 	Token    string `gorm:"size:255" json:"token"`
-	Block    int    `gorm:"_" json:"block"`
+	Status   string `gorm:"type:varchar(20);" json:"status"`
 }
 
 /**
@@ -57,6 +57,14 @@ func (user *User) BeforeCreate(scope *gorm.Scope) error {
 	return nil
 }
 
+/*
+* event run after user register
+ */
+func (u *User) AfterCreate(scope *gorm.Scope) (err error) {
+	IncreaseOnCreate("users")
+	return
+}
+
 /**
 * migration function must be the file name concat with Migrate
 * key word Example : user will be UserMigrate
@@ -69,12 +77,12 @@ func UserMigrate() {
 * you can update these column only
  */
 func UserFillAbleColumn() []string {
-	return []string{"name", "email", "role", "password", "block"}
+	return []string{"name", "email", "role", "password", "status"}
 }
 
 /**
 * active category only
  */
 func ActiveUser(db *gorm.DB) *gorm.DB {
-	return db.Where("status = 2")
+	return db.Where("status = " + ACTIVE)
 }

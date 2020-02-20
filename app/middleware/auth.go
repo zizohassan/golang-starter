@@ -33,7 +33,7 @@ func Auth() gin.HandlerFunc {
 			return
 		}
 		/// check if user block or not
-		if user.Block != 2 {
+		if user.Status != models.BLOCK {
 			helpers.ReturnYouAreNotAuthorize(g)
 			g.Abort()
 			return

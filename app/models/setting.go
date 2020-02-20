@@ -18,6 +18,14 @@ type Setting struct {
 	Slug        string `gorm:"type:varchar(50);" json:"slug"`
 }
 
+/*
+* event run after add Setting
+ */
+func (u *Setting) AfterCreate(scope *gorm.Scope) (err error) {
+	IncreaseOnCreate("settings")
+	return
+}
+
 /**
 * migration function must be the file name concat with Migrate
 * key word Example : user will be UserMigrate

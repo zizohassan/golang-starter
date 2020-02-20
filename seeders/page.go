@@ -13,7 +13,7 @@ func  PageSeeder() {
 	for _, page := range pages() {
 		data := models.Page{
 			Name:   page,
-			Status: 1,
+			Status: models.ACTIVE,
 		}
 		config.DB.Create(&data)
 	}

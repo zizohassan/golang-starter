@@ -25,7 +25,7 @@ func newUser(admin bool)  {
 		Email:    faker.Internet().Email()  ,
 		Password: faker.Internet().Password(8, 14),
 		Name:     faker.Internet().UserName(),
-		Block:  2 ,
+		Status:  models.ACTIVE ,
 	}
 	if admin {
 		data.Role = 2

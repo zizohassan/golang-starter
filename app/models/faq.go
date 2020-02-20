@@ -26,6 +26,14 @@ func  FaqMigrate() {
 	config.DB.AutoMigrate(&Faq{})
 }
 
+/*
+* event run after add Category
+ */
+func (u *Faq) AfterCreate(scope *gorm.Scope) (err error) {
+	IncreaseOnCreate("faqs")
+	return
+}
+
 /**
 * you can update these column only
  */
