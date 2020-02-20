@@ -94,3 +94,40 @@ func UserFillAbleColumn() []string {
 func ActiveUser(db *gorm.DB) *gorm.DB {
 	return db.Where("status = " + ACTIVE)
 }
+
+func GetUserTable() Table {
+	table := Table{
+		Name: "users",
+		Columns: []Column{DefulteColumn("name"), {
+			Name:       "block",
+			Sort:       true,
+			Show:       true,
+			Label:      "User Status",
+			RenderType: "text",
+			Align:      "center",
+			Filter: Filter{
+				ShowFilter:         true,
+				FilterType:         "select",
+				DefaultFilterValue: "",
+				FilterOptions: []Option{{
+					Text: "select user status",
+				}, {
+					Text:  "Block",
+					Value: 1,
+				}, {
+					Text:  "Active",
+					Value: 2,
+				}},
+			},
+			Form: Form{
+				InputType:      "select",
+				SubmitOnUpdate: true,
+				SubmitOnCreate: true,
+				StoreType:      "integer",
+				Placeholder:    "select status",
+				QuickEdit:      true,
+			},
+		}},
+	}
+	return table
+}
